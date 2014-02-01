@@ -28,10 +28,32 @@ TutorialApplication::~TutorialApplication(void)
 //-------------------------------------------------------------------------------------
 void TutorialApplication::createScene(void)
 {
-    // create your scene here :)
+	
 }
 
+//-------------------------------------------------------------------------------------
+void TutorialApplication::createCamera(void)
+{
+	// Create the camera.
+    mCamera = mSceneMgr->createCamera("PlayCamera");
 
+	// Setup position and direction.
+	mCamera->setPosition(Ogre::Vector3(0, 10, 500));
+	mCamera->lookAt(Ogre::Vector3(0, 0, 0));
+
+	// Setup camera properties.
+	mCamera->setNearClipDistance(5);
+	//mCamera->setFarClipDistance(100); // DO NOT USE, WE'RE STENCILING SO FAR CLIP IS NOT NECESSARY
+
+	// Setup and bind camera man.
+	mCameraMan = new OgreBites::SdkCameraMan(mCamera);
+}
+
+//-------------------------------------------------------------------------------------
+void TutorialApplication::createViewports(void)
+{
+	
+}
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #define WIN32_LEAN_AND_MEAN
