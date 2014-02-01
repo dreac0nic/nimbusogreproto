@@ -21,3 +21,5 @@ build/*
 
 # Keep OGRE directories hidden for now ...
 ogre/*
+
+# THIS IS A COMMENT
