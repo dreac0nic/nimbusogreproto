@@ -11,3 +11,6 @@
 *.lai
 *.la
 *.a
+
+# Keep OGRE directories hidden for now ...
+ogre/*
