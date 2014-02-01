@@ -28,6 +28,8 @@ TutorialApplication::~TutorialApplication(void)
 //-------------------------------------------------------------------------------------
 void TutorialApplication::createScene(void)
 {
+	Ogre::LogManager::getSingletonPtr()->logMessage("Creating scene ... ");
+	
 	// Setup light and shadow settings.
 	mSceneMgr->setAmbientLight(Ogre::ColourValue(0, 0, 0)); // Ugh more black ...
 	mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
@@ -77,6 +79,8 @@ void TutorialApplication::createScene(void)
 	spotLight->setPosition(Ogre::Vector3(300, 300, 0));
 
 	spotLight->setSpotlightRange(Ogre::Degree(35), Ogre::Degree(50));
+
+	Ogre::LogManager::getSingletonPtr()->logMessage("DONE\n");
 }
 
 //-------------------------------------------------------------------------------------
