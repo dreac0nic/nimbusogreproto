@@ -12,6 +12,9 @@
 *.la
 *.a
 
+# Special environment ignores (IDEs, editors, etc ...)
+*.opensdf
+
 # Build directories, including intermediates
 build/*
 
