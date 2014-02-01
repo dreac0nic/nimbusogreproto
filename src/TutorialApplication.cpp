@@ -47,8 +47,36 @@ void TutorialApplication::createScene(void)
 	mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(entGround);
 
 	// Create plane material.
-	entGround->setMaterialName("Examples\Rockwall");
+	entGround->setMaterialName("Examples/Rockwall");
 	entGround->setCastShadows(false);
+
+	// Setup non-baked lighting.
+	// Point lighting
+	Ogre::Light* pointLight = mSceneMgr->createLight("pointLight");
+	pointLight->setType(Ogre::Light::LT_POINT);
+	pointLight->setPosition(Ogre::Vector3(0, 150, 250));
+
+	pointLight->setDiffuseColour(1.0f, 0.0f, 0.0f);
+	pointLight->setSpecularColour(1.0f, 0.0f, 0.0f);
+
+	// Directional lighting
+	Ogre::Light* directionLight = mSceneMgr->createLight("directionalLight");
+	directionLight->setType(Ogre::Light::LT_DIRECTIONAL);
+	directionLight->setDiffuseColour(Ogre::ColourValue(0.25f, 0.25f, 0.0f));
+	directionLight->setSpecularColour(Ogre::ColourValue(0.25f, 0.25f, 0.0f));
+
+	directionLight->setDirection(Ogre::Vector3(0, -1, 1));
+
+	// Spot lighting
+	Ogre::Light* spotLight = mSceneMgr->createLight("spotLight");
+	spotLight->setType(Ogre::Light::LT_SPOTLIGHT);
+	spotLight->setDiffuseColour(0.0f, 0.0f, 1.0f);
+	spotLight->setSpecularColour(0.0f, 0.0f, 1.0f);
+
+	spotLight->setDirection(Ogre::Vector3(-1, -1, 0));
+	spotLight->setPosition(Ogre::Vector3(300, 300, 0));
+
+	spotLight->setSpotlightRange(Ogre::Degree(35), Ogre::Degree(50));
 }
 
 //-------------------------------------------------------------------------------------
