@@ -52,7 +52,14 @@ void TutorialApplication::createCamera(void)
 //-------------------------------------------------------------------------------------
 void TutorialApplication::createViewports(void)
 {
-	
+	// Create our viewport.
+	Ogre::Viewport *vp = mWindow->addViewport(mCamera);
+
+	// Set viewport background color.
+	vp->setBackgroundColour(Ogre::ColourValue(0, 0, 0)); // Ew, black. Fix later. Black is dumb.
+
+	// Fix camera aspect ratio.
+	mCamera->setAspectRatio(Ogre::Real(vp->getActualWidth())/Ogre::Real(vp->getActualHeight()));
 }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
