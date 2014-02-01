@@ -12,5 +12,8 @@
 *.la
 *.a
 
+# Build directories, including intermediates
+build/*
+
 # Keep OGRE directories hidden for now ...
 ogre/*
