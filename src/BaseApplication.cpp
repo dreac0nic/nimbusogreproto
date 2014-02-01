@@ -219,10 +219,8 @@ bool BaseApplication::setup(void)
     mRoot = new Ogre::Root(mPluginsCfg);
 
     setupResources();
-
     bool carryOn = configure();
     if (!carryOn) return false;
-
     chooseSceneManager();
     createCamera();
     createViewports();

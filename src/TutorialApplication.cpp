@@ -28,8 +28,6 @@ TutorialApplication::~TutorialApplication(void)
 //-------------------------------------------------------------------------------------
 void TutorialApplication::createScene(void)
 {
-	Ogre::LogManager::getSingletonPtr()->logMessage("Creating scene ... ");
-	
 	// Setup light and shadow settings.
 	mSceneMgr->setAmbientLight(Ogre::ColourValue(0, 0, 0)); // Ugh more black ...
 	mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
@@ -79,8 +77,6 @@ void TutorialApplication::createScene(void)
 	spotLight->setPosition(Ogre::Vector3(300, 300, 0));
 
 	spotLight->setSpotlightRange(Ogre::Degree(35), Ogre::Degree(50));
-
-	Ogre::LogManager::getSingletonPtr()->logMessage("DONE\n");
 }
 
 //-------------------------------------------------------------------------------------
@@ -114,37 +110,25 @@ void TutorialApplication::createViewports(void)
 	mCamera->setAspectRatio(Ogre::Real(vp->getActualWidth())/Ogre::Real(vp->getActualHeight()));
 }
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-#define WIN32_LEAN_AND_MEAN
 #include "windows.h"
-#endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-    INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, INT )
-#else
-    int main(int argc, char *argv[])
-#endif
-    {
-        // Create application object
-        TutorialApplication app;
+int main(int argc, char *argv[])
+{
+	// Create application object
+    TutorialApplication app;
+	
+	try {
+		app.go();
+	} catch( Ogre::Exception& e ) {
+		std::cerr << "An exception has occured: " << e.getFullDescription().c_str() << std::endl;
+	}
 
-        try {
-            app.go();
-        } catch( Ogre::Exception& e ) {
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-            MessageBox( NULL, e.getFullDescription().c_str(), "An exception has occured!", MB_OK | MB_ICONERROR | MB_TASKMODAL);
-#else
-            std::cerr << "An exception has occured: " <<
-                e.getFullDescription().c_str() << std::endl;
-#endif
-        }
-
-        return 0;
-    }
+	return 0;
+}
 
 #ifdef __cplusplus
 }
