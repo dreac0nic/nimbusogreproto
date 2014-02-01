@@ -28,7 +28,27 @@ TutorialApplication::~TutorialApplication(void)
 //-------------------------------------------------------------------------------------
 void TutorialApplication::createScene(void)
 {
-	
+	// Setup light and shadow settings.
+	mSceneMgr->setAmbientLight(Ogre::ColourValue(0, 0, 0)); // Ugh more black ...
+	mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
+
+	// Add some objects to the scene.
+	Ogre::Entity* entNinja = mSceneMgr->createEntity("Ninja", "ninja.mesh");
+	entNinja->setCastShadows(true);
+
+	mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(entNinja);
+
+	// Setup plane.
+	Ogre::Plane plane(Ogre::Vector3::UNIT_Y, 0);
+
+	Ogre::MeshManager::getSingleton().createPlane("ground", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane, 1500, 1500, 20, 20, true, 1, 5, 5, Ogre::Vector3::UNIT_Z);
+
+	Ogre::Entity* entGround = mSceneMgr->createEntity("Ground", "ground");
+	mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(entGround);
+
+	// Create plane material.
+	entGround->setMaterialName("Examples\Rockwall");
+	entGround->setCastShadows(false);
 }
 
 //-------------------------------------------------------------------------------------
