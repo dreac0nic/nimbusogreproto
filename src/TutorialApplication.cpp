@@ -20,98 +20,197 @@ This source file is part of the
 TutorialApplication::TutorialApplication(void)
 {
 }
+
 //-------------------------------------------------------------------------------------
 TutorialApplication::~TutorialApplication(void)
 {
 }
 
 //-------------------------------------------------------------------------------------
+void TutorialApplication::destroyScene(void)
+{
+}
+
+//-------------------------------------------------------------------------------------
+void getTerrainImage(bool flipX, bool flipY, Ogre::Image& img)
+{
+	img.load("terrain.png", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+
+	if(flipX) img.flipAroundY();
+
+	if(flipY) img.flipAroundX();
+}
+
+//-------------------------------------------------------------------------------------
+void TutorialApplication::defineTerrain(long x, long y)
+{
+	Ogre::String filename = mTerrainGroup->generateFilename(x, y);
+
+	if(Ogre::ResourceGroupManager::getSingleton().resourceExists(mTerrainGroup->getResourceGroup(), filename))
+	{
+		mTerrainGroup->defineTerrain(x, y);
+	}
+	else
+	{
+		Ogre::Image img;
+
+		getTerrainImage((x%2) != 0, (y%2) != 0, img);
+		mTerrainGroup->defineTerrain(x, y, &img);
+		mTerrainsImported = true;
+	}
+}
+
+//-------------------------------------------------------------------------------------
+void TutorialApplication::initBlendMaps(Ogre::Terrain* terrain)
+{
+	// BLARGE DOCUMENT LATER JGNLKAJSDNGFLKAJSDNLKAJSNBLFASBHABSLFBALDSKJHFBLSAJKSDDHbfLKJABSFLKJBSALFKJBSALKJDBASLKJFHBALKJDGNLIUASNLIUABEWF
+	Ogre::TerrainLayerBlendMap* blendMap0 = terrain->getLayerBlendMap(1);
+	Ogre::TerrainLayerBlendMap* blendMap1 = terrain->getLayerBlendMap(2);
+
+	Ogre::Real minHeight0 = 70;
+	Ogre::Real fadeDist0 = 40;
+	Ogre::Real minHeight1 = 70;
+	Ogre::Real fadeDist1 = 15;
+
+	float* pBlend0 = blendMap0->getBlendPointer();
+	float* pBlend1 = blendMap1->getBlendPointer();
+
+	for(Ogre::uint16 y = 0 ; y < terrain->getLayerBlendMapSize(); ++y)
+	{
+		for(Ogre::uint16 x = 0; x < terrain->getLayerBlendMapSize(); ++x)
+		{
+			Ogre::Real tx, ty;
+
+			blendMap0->convertImageToTerrainSpace(x, y, &tx, &ty);
+			
+			Ogre::Real height = terrain->getHeightAtTerrainPosition(tx, ty);
+			Ogre::Real val = (height - minHeight0)/fadeDist0;
+
+			val = Ogre::Math::Clamp(val, (Ogre::Real)0, (Ogre::Real)1);
+			*pBlend0++ = val;
+
+			val = (height - minHeight1)/fadeDist1;
+			val = Ogre::Math::Clamp(val, (Ogre::Real)0, (Ogre::Real)1);
+			*pBlend1++ = val;
+		}
+	}
+
+	blendMap0->dirty();
+	blendMap1->dirty();
+
+	blendMap0->update();
+	blendMap1->update();
+}
+
+//-------------------------------------------------------------------------------------
+void TutorialApplication::configureTerrainDefaults(Ogre::Light* light)
+{
+	// Configure globals.
+	mTerrainGlobals->setMaxPixelError(8);
+
+	// Test composites.
+	mTerrainGlobals->setCompositeMapDistance(3000);
+
+	// Set map globals for lighting.
+	mTerrainGlobals->setLightMapDirection(light->getDerivedDirection());
+	mTerrainGlobals->setCompositeMapAmbient(mSceneMgr->getAmbientLight());
+	mTerrainGlobals->setCompositeMapDiffuse(light->getDiffuseColour());
+
+	// Configure the settings for importing.
+	Ogre::Terrain::ImportData& importConfig = mTerrainGroup->getDefaultImportSettings();
+	importConfig.terrainSize = 513;
+	importConfig.worldSize = 12000.0f;
+	importConfig.inputScale = 600;
+	importConfig.minBatchSize = 33;
+	importConfig.maxBatchSize = 65;
+
+	// Load some textures!
+	importConfig.layerList.resize(3);
+	
+	importConfig.layerList[0].worldSize = 100;
+	importConfig.layerList[0].textureNames.push_back("dirt_grayrocky_diffusespecular.dds");
+	importConfig.layerList[0].textureNames.push_back("dirt_grayrocky_normalheight.dds");
+
+	importConfig.layerList[1].worldSize = 30;
+	importConfig.layerList[1].textureNames.push_back("grass_green-01_diffusespecular.dds");
+	importConfig.layerList[1].textureNames.push_back("grass_green-01_normalheight.dds");
+
+	importConfig.layerList[2].worldSize = 200;
+	importConfig.layerList[2].textureNames.push_back("growth_weirdfungus-03_diffusespecular.dds");
+	importConfig.layerList[2].textureNames.push_back("growth_weirdfungus-03_normalheight.dds");
+}
+
+//-------------------------------------------------------------------------------------
 void TutorialApplication::createScene(void)
 {
-	// Setup light and shadow settings.
-	mSceneMgr->setAmbientLight(Ogre::ColourValue(0, 0, 0)); // Ugh more black ...
-	mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
+	// Setup camera, actually using a FAR CLIP PLANE this time.
+	mCamera->setPosition(Ogre::Vector3(1683, 50, 2116));
+	mCamera->lookAt(Ogre::Vector3(1963, 50, 1660));
+	mCamera->setNearClipDistance(0.1f);
+	mCamera->setFarClipDistance(50000.0f);
 
-	// Add some objects to the scene.
-	Ogre::Entity* entNinja = mSceneMgr->createEntity("Ninja", "ninja.mesh");
-	entNinja->setCastShadows(true);
+	// Setup infinite far clip plane, if supported.
+	if(mRoot->getRenderSystem()->getCapabilities()->hasCapability(Ogre::RSC_INFINITE_FAR_PLANE))
+		mCamera->setFarClipDistance(0);
 
-	mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(entNinja);
+	// Setup some lighting.
+	Ogre::Vector3 lightdir(0.55f, -0.3f, 0.75f);
+	lightdir.normalise();
 
-	// Setup plane.
-	Ogre::Plane plane(Ogre::Vector3::UNIT_Y, 0);
+	Ogre::Light* light = mSceneMgr->createLight("tstLight");
+	light->setType(Ogre::Light::LT_DIRECTIONAL);
+	light->setDirection(lightdir);
+	light->setDiffuseColour(Ogre::ColourValue::White);
+	light->setSpecularColour(Ogre::ColourValue(0.4f, 0.4f, 0.4f));
 
-	Ogre::MeshManager::getSingleton().createPlane("ground", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, plane, 1500, 1500, 20, 20, true, 1, 5, 5, Ogre::Vector3::UNIT_Z);
+	// -- Blarge, ambient light ...
+	mSceneMgr->setAmbientLight(Ogre::ColourValue(0.2f, 0.2f, 0.2f));
 
-	Ogre::Entity* entGround = mSceneMgr->createEntity("Ground", "ground");
-	mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(entGround);
+	// Create terrain ...
+	mTerrainGlobals = OGRE_NEW Ogre::TerrainGlobalOptions();
 
-	// Create plane material.
-	entGround->setMaterialName("Examples/Rockwall");
-	entGround->setCastShadows(false);
+	mTerrainGroup = OGRE_NEW Ogre::TerrainGroup(mSceneMgr, Ogre::Terrain::ALIGN_X_Z, 513, 12000.0f);
+	mTerrainGroup->setFilenameConvention(Ogre::String("BasicTutorial3Terrain"), Ogre::String("dat")); // TERRAIN LOADING
+	mTerrainGroup->setOrigin(Ogre::Vector3::ZERO);
 
-	// Setup non-baked lighting.
-	// Point lighting
-	Ogre::Light* pointLight = mSceneMgr->createLight("pointLight");
-	pointLight->setType(Ogre::Light::LT_POINT);
-	pointLight->setPosition(Ogre::Vector3(0, 150, 250));
+	this->configureTerrainDefaults(light);
+	
+	// Define our terrains...?
+	for(long x = 0; x <= 0; ++x)
+		for(long y = 0; y <= 0; ++y)
+			defineTerrain(x, y);
 
-	pointLight->setDiffuseColour(1.0f, 0.0f, 0.0f);
-	pointLight->setSpecularColour(1.0f, 0.0f, 0.0f);
+	// Force loading of all terrains before starting application.
+	mTerrainGroup->loadAllTerrains(true);
 
-	// Directional lighting
-	Ogre::Light* directionLight = mSceneMgr->createLight("directionalLight");
-	directionLight->setType(Ogre::Light::LT_DIRECTIONAL);
-	directionLight->setDiffuseColour(Ogre::ColourValue(0.25f, 0.25f, 0.0f));
-	directionLight->setSpecularColour(Ogre::ColourValue(0.25f, 0.25f, 0.0f));
+	// Calculate blend maps.
+	if(mTerrainsImported)
+	{
+		Ogre::TerrainGroup::TerrainIterator ti = mTerrainGroup->getTerrainIterator();
 
-	directionLight->setDirection(Ogre::Vector3(0, -1, 1));
+		while(ti.hasMoreElements())
+		{
+			Ogre::Terrain* t = ti.getNext()->instance;
 
-	// Spot lighting
-	Ogre::Light* spotLight = mSceneMgr->createLight("spotLight");
-	spotLight->setType(Ogre::Light::LT_SPOTLIGHT);
-	spotLight->setDiffuseColour(0.0f, 0.0f, 1.0f);
-	spotLight->setSpecularColour(0.0f, 0.0f, 1.0f);
+			initBlendMaps(t);
+		}
+	}
 
-	spotLight->setDirection(Ogre::Vector3(-1, -1, 0));
-	spotLight->setPosition(Ogre::Vector3(300, 300, 0));
-
-	spotLight->setSpotlightRange(Ogre::Degree(35), Ogre::Degree(50));
+	// Clean it all up ...
+	mTerrainGroup->freeTemporaryResources();
 }
 
 //-------------------------------------------------------------------------------------
-void TutorialApplication::createCamera(void)
+void TutorialApplication::createFrameListener(void)
 {
-	// Create the camera.
-    mCamera = mSceneMgr->createCamera("PlayCamera");
 
-	// Setup position and direction.
-	mCamera->setPosition(Ogre::Vector3(0, 10, 500));
-	mCamera->lookAt(Ogre::Vector3(0, 0, 0));
-
-	// Setup camera properties.
-	// mSceneMgr->setShadowUseInfiniteFarPlane(false);
-	mCamera->setNearClipDistance(5);
-	// mCamera->setFarClipDistance(500); // DO NOT USE, WE'RE STENCILING SO FAR CLIP IS NOT NECESSARY
-
-	// Setup and bind camera man.
-	mCameraMan = new OgreBites::SdkCameraMan(mCamera);
 }
 
 //-------------------------------------------------------------------------------------
-void TutorialApplication::createViewports(void)
+bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& event)
 {
-	// Create our viewport.
-	Ogre::Viewport *vp = mWindow->addViewport(mCamera);
-
-	// Set viewport background color.
-	vp->setBackgroundColour(Ogre::ColourValue(0, 0, 0)); // Ew, black. Fix later. Black is dumb.
-
-	// Fix camera aspect ratio.
-	mCamera->setAspectRatio(Ogre::Real(vp->getActualWidth())/Ogre::Real(vp->getActualHeight()));
+	return false;
 }
-
-#include "windows.h"
 
 #ifdef __cplusplus
 extern "C" {
