@@ -198,8 +198,11 @@ void TutorialApplication::createScene(void)
 		}
 	}
 
-	// Clean it all up ...
+	// Clean up terrain generation.
 	mTerrainGroup->freeTemporaryResources();
+
+	// Add skydome.
+	mSceneMgr->setSkyDome(true, "Examples/CloudySky", 5.0f, 8.0f);
 }
 
 //-------------------------------------------------------------------------------------
