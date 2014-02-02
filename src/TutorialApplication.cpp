@@ -90,8 +90,9 @@ void TutorialApplication::createCamera(void)
 	mCamera->lookAt(Ogre::Vector3(0, 0, 0));
 
 	// Setup camera properties.
+	// mSceneMgr->setShadowUseInfiniteFarPlane(false);
 	mCamera->setNearClipDistance(5);
-	//mCamera->setFarClipDistance(100); // DO NOT USE, WE'RE STENCILING SO FAR CLIP IS NOT NECESSARY
+	// mCamera->setFarClipDistance(500); // DO NOT USE, WE'RE STENCILING SO FAR CLIP IS NOT NECESSARY
 
 	// Setup and bind camera man.
 	mCameraMan = new OgreBites::SdkCameraMan(mCamera);
