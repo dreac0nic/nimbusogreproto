@@ -15,6 +15,7 @@
 # Special environment ignores (IDEs, editors, etc ...)
 *.opensdf
 *.sdf
+*.suo
 
 # Build directories, including intermediates
 build/*
