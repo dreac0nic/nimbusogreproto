@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-Filename:    TutorialApplication.h
+Filename:    NimbusPrototype.h
 -----------------------------------------------------------------------------
 
 This source file is part of the
@@ -14,17 +14,15 @@ This source file is part of the
       http://www.ogre3d.org/tikiwiki/
 -----------------------------------------------------------------------------
 */
-#ifndef __TutorialApplication_h_
-#define __TutorialApplication_h_
-
-#include <windows.h>
+#ifndef __NIMBUSPROTOTYPE
+#define __NIMBUSPROTOTYPE
 
 #include <Terrain/OgreTerrain.h>
 #include <Terrain/OgreTerrainGroup.h>
 
 #include "BaseApplication.h"
 
-class TutorialApplication : public BaseApplication
+class NimbusPrototype : public BaseApplication
 {
 private:
 	Ogre::TerrainGlobalOptions* mTerrainGlobals;
@@ -39,8 +37,8 @@ private:
 	void configureTerrainDefaults(Ogre::Light* light);
 
 public:
-    TutorialApplication(void);
-    virtual ~TutorialApplication(void);
+    NimbusPrototype(void);
+    virtual ~NimbusPrototype(void);
 
 protected:
     virtual void createScene(void);
@@ -49,4 +47,4 @@ protected:
 	virtual bool frameRenderingQueued(const Ogre::FrameEvent& event);
 };
 
-#endif // #ifndef __TutorialApplication_h_
+#endif
