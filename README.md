@@ -23,4 +23,7 @@ Project\ogre\include
 Project\ogre\lib
 Project\ogre\media
 Project\ogre\version.txt
+Project\ogre\boost
+Project\ogre\boost
+Project\ogre\boost\lib
 ```
