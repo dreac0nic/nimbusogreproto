@@ -29,6 +29,8 @@ TutorialApplication::~TutorialApplication(void)
 //-------------------------------------------------------------------------------------
 void TutorialApplication::destroyScene(void)
 {
+	OGRE_DELETE mTerrainGroup;
+	OGRE_DELETE mTerrainGlobals;
 }
 
 //-------------------------------------------------------------------------------------
@@ -107,7 +109,7 @@ void TutorialApplication::configureTerrainDefaults(Ogre::Light* light)
 {
 	// Configure globals.
 	mTerrainGlobals->setMaxPixelError(8);
-
+	
 	// Test composites.
 	mTerrainGlobals->setCompositeMapDistance(3000);
 
@@ -203,13 +205,37 @@ void TutorialApplication::createScene(void)
 //-------------------------------------------------------------------------------------
 void TutorialApplication::createFrameListener(void)
 {
+	BaseApplication::createFrameListener();
 
+	mInfoLabel = mTrayMgr->createLabel(OgreBites::TL_TOP, "TInfo", "", 350);
 }
 
 //-------------------------------------------------------------------------------------
 bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& event)
 {
-	return false;
+	bool ret = BaseApplication::frameRenderingQueued(event);
+
+	if(mTerrainGroup->isDerivedDataUpdateInProgress())
+	{
+		mTrayMgr->moveWidgetToTray(mInfoLabel, OgreBites::TL_TOP, 0);
+		mInfoLabel->show();
+
+		if(mTerrainsImported) mInfoLabel->setCaption("Building terrain, please wait ...");
+		else mInfoLabel->setCaption("Updating textures, please wait ...");
+	}
+	else
+	{
+		mTrayMgr->removeWidgetFromTray(mInfoLabel);
+		mInfoLabel->hide();
+
+		if(mTerrainsImported)
+		{
+			mTerrainGroup->saveAllTerrains(true);
+			mTerrainsImported = false;
+		}
+	}
+
+	return ret;
 }
 
 #ifdef __cplusplus

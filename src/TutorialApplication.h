@@ -29,6 +29,8 @@ class TutorialApplication : public BaseApplication
 private:
 	Ogre::TerrainGlobalOptions* mTerrainGlobals;
 	Ogre::TerrainGroup* mTerrainGroup;
+
+	OgreBites::Label* mInfoLabel;
 	
 	bool mTerrainsImported;
 
