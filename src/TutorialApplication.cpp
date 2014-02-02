@@ -16,6 +16,9 @@ This source file is part of the
 */
 #include "TutorialApplication.h"
 
+#define TERRAIN_SIZE 513
+#define WORLD_SIZE   12000.0f
+
 //-------------------------------------------------------------------------------------
 TutorialApplication::TutorialApplication(void)
 {
@@ -120,8 +123,8 @@ void TutorialApplication::configureTerrainDefaults(Ogre::Light* light)
 
 	// Configure the settings for importing.
 	Ogre::Terrain::ImportData& importConfig = mTerrainGroup->getDefaultImportSettings();
-	importConfig.terrainSize = 513;
-	importConfig.worldSize = 12000.0f;
+	importConfig.terrainSize = TERRAIN_SIZE;
+	importConfig.worldSize = WORLD_SIZE;
 	importConfig.inputScale = 600;
 	importConfig.minBatchSize = 33;
 	importConfig.maxBatchSize = 65;
@@ -171,7 +174,7 @@ void TutorialApplication::createScene(void)
 	// Create terrain ...
 	mTerrainGlobals = OGRE_NEW Ogre::TerrainGlobalOptions();
 
-	mTerrainGroup = OGRE_NEW Ogre::TerrainGroup(mSceneMgr, Ogre::Terrain::ALIGN_X_Z, 513, 12000.0f);
+	mTerrainGroup = OGRE_NEW Ogre::TerrainGroup(mSceneMgr, Ogre::Terrain::ALIGN_X_Z, TERRAIN_SIZE, WORLD_SIZE);
 	mTerrainGroup->setFilenameConvention(Ogre::String("BasicTutorial3Terrain"), Ogre::String("dat")); // TERRAIN LOADING
 	mTerrainGroup->setOrigin(Ogre::Vector3::ZERO);
 
