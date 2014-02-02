@@ -10,7 +10,7 @@ This source file is part of the
 / \_// (_| | | |  __/  \  /\  /| |   <| |
 \___/ \__, |_|  \___|   \/  \/ |_|_|\_\_|
       |___/                              
-      Tutorial Framework
+      Tutorial Framework, fixed for Ogre 1.9 (Manual Mods)
       http://www.ogre3d.org/tikiwiki/
 -----------------------------------------------------------------------------
 */
@@ -79,10 +79,16 @@ protected:
     Ogre::String mResourcesCfg;
     Ogre::String mPluginsCfg;
 
+	// Added for 1.9
+	Ogre::OverlaySystem *mOverlaySystem;
+
     // OgreBites
     OgreBites::SdkTrayManager* mTrayMgr;
     OgreBites::SdkCameraMan* mCameraMan;       // basic camera controller
     OgreBites::ParamsPanel* mDetailsPanel;     // sample details panel
+
+	OgreBites::InputContext mInputContext;
+
     bool mCursorWasVisible;                    // was cursor visible before dialog appeared
     bool mShutDown;
 
