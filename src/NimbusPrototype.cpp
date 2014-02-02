@@ -14,20 +14,20 @@ This source file is part of the
       http://www.ogre3d.org/tikiwiki/
 -----------------------------------------------------------------------------
 */
-#include "TutorialApplication.h"
+#include "NimbusPrototype.h"
 
 //-------------------------------------------------------------------------------------
-TutorialApplication::TutorialApplication(void)
+NimbusPrototype::NimbusPrototype(void)
 {
 }
 
 //-------------------------------------------------------------------------------------
-TutorialApplication::~TutorialApplication(void)
+NimbusPrototype::~NimbusPrototype(void)
 {
 }
 
 //-------------------------------------------------------------------------------------
-void TutorialApplication::destroyScene(void)
+void NimbusPrototype::destroyScene(void)
 {
 	OGRE_DELETE mTerrainGroup;
 	OGRE_DELETE mTerrainGlobals;
@@ -44,7 +44,7 @@ void getTerrainImage(bool flipX, bool flipY, Ogre::Image& img)
 }
 
 //-------------------------------------------------------------------------------------
-void TutorialApplication::defineTerrain(long x, long y)
+void NimbusPrototype::defineTerrain(long x, long y)
 {
 	Ogre::String filename = mTerrainGroup->generateFilename(x, y);
 
@@ -63,7 +63,7 @@ void TutorialApplication::defineTerrain(long x, long y)
 }
 
 //-------------------------------------------------------------------------------------
-void TutorialApplication::initBlendMaps(Ogre::Terrain* terrain)
+void NimbusPrototype::initBlendMaps(Ogre::Terrain* terrain)
 {
 	// BLARGE DOCUMENT LATER JGNLKAJSDNGFLKAJSDNLKAJSNBLFASBHABSLFBALDSKJHFBLSAJKSDDHbfLKJABSFLKJBSALFKJBSALKJDBASLKJFHBALKJDGNLIUASNLIUABEWF
 	Ogre::TerrainLayerBlendMap* blendMap0 = terrain->getLayerBlendMap(1);
@@ -105,7 +105,7 @@ void TutorialApplication::initBlendMaps(Ogre::Terrain* terrain)
 }
 
 //-------------------------------------------------------------------------------------
-void TutorialApplication::configureTerrainDefaults(Ogre::Light* light)
+void NimbusPrototype::configureTerrainDefaults(Ogre::Light* light)
 {
 	// Configure globals.
 	mTerrainGlobals->setMaxPixelError(8);
@@ -143,7 +143,7 @@ void TutorialApplication::configureTerrainDefaults(Ogre::Light* light)
 }
 
 //-------------------------------------------------------------------------------------
-void TutorialApplication::createScene(void)
+void NimbusPrototype::createScene(void)
 {
 	// Setup camera, actually using a FAR CLIP PLANE this time.
 	mCamera->setPosition(Ogre::Vector3(1683, 50, 2116));
@@ -206,7 +206,7 @@ void TutorialApplication::createScene(void)
 }
 
 //-------------------------------------------------------------------------------------
-void TutorialApplication::createFrameListener(void)
+void NimbusPrototype::createFrameListener(void)
 {
 	BaseApplication::createFrameListener();
 
@@ -214,7 +214,7 @@ void TutorialApplication::createFrameListener(void)
 }
 
 //-------------------------------------------------------------------------------------
-bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& event)
+bool NimbusPrototype::frameRenderingQueued(const Ogre::FrameEvent& event)
 {
 	bool ret = BaseApplication::frameRenderingQueued(event);
 
@@ -240,25 +240,3 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& event)
 
 	return ret;
 }
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-int main(int argc, char *argv[])
-{
-	// Create application object
-    TutorialApplication app;
-	
-	try {
-		app.go();
-	} catch( Ogre::Exception& e ) {
-		std::cerr << "An exception has occured: " << e.getFullDescription().c_str() << std::endl;
-	}
-
-	return 0;
-}
-
-#ifdef __cplusplus
-}
-#endif
