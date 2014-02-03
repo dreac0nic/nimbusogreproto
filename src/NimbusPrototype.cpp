@@ -170,7 +170,7 @@ void NimbusPrototype::createScene(void)
 	Ogre::Vector3 lightdir(0.55f, -0.3f, 0.75f);
 	lightdir.normalise();
 
-	Ogre::Light* light = mSceneMgr->createLight("tstLight");
+	Ogre::Light* light = mSceneMgr->createLight("sun");
 	light->setType(Ogre::Light::LT_DIRECTIONAL);
 	light->setDirection(lightdir);
 	light->setDiffuseColour(Ogre::ColourValue::White);
@@ -183,7 +183,7 @@ void NimbusPrototype::createScene(void)
 	mTerrainGlobals = OGRE_NEW Ogre::TerrainGlobalOptions();
 
 	mTerrainGroup = OGRE_NEW Ogre::TerrainGroup(mSceneMgr, Ogre::Terrain::ALIGN_X_Z, TERRAIN_SIZE, WORLD_SIZE);
-	mTerrainGroup->setFilenameConvention(Ogre::String("BasicTutorial3Terrain"), Ogre::String("dat")); // TERRAIN LOADING
+	mTerrainGroup->setFilenameConvention(Ogre::String("NimbusTerrain"), Ogre::String("dat")); // TERRAIN LOADING
 	mTerrainGroup->setOrigin(Ogre::Vector3::ZERO);
 
 	this->configureTerrainDefaults(light);
