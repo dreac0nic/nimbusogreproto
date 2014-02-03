@@ -38,6 +38,7 @@ Controlling the camera in an RTS style.
  * [_] Wind Manipulation
 
 ## NOTES
+### Installation
 Currently does not include OGRE library files for the sake of repository integrity. May be included in a future version.
 
 To properly install OGRE, copy the contents of the OGRE folder into ./ProjectDir/ogre/
@@ -54,3 +55,6 @@ Project\ogre\boost
 Project\ogre\boost
 Project\ogre\boost\lib
 ```
+
+### OgreBites
+OgreBites is a tutorial framework used to make introduction to the OGRE framework easy. We should be avoiding using anything used within this library and any references to it will be phased out with time.
