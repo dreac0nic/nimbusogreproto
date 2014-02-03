@@ -85,7 +85,7 @@ protected:
 
     // OgreBites
     OgreBites::SdkTrayManager* mTrayMgr;
-    CustCameraMan* mCameraMan;       // basic camera controller
+    OgreBites::SdkCameraMan* mCameraMan;       // basic camera controller
     OgreBites::ParamsPanel* mDetailsPanel;     // sample details panel
 
 	OgreBites::InputContext mInputContext;

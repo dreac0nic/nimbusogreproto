@@ -6,6 +6,10 @@
 
 class CustCameraMan : public OgreBites::SdkCameraMan
 {
+public:
+	// Constructor snitching .. oh well
+	CustCameraMan(Ogre::Camera* cam) : SdkCameraMan(cam) {}
+	
 	virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt)
 	{
 		if (mStyle == OgreBites::CS_FREELOOK)
