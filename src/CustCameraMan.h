@@ -4,11 +4,11 @@
 #include "Ogre.h"
 #include <limits>
 
-class CustCameraMan : SdkCameraMan
+class CustCameraMan : public OgreBites::SdkCameraMan
 {
 	virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt)
 	{
-		if (mStyle == CS_FREELOOK)
+		if (mStyle == OgreBites::CS_FREELOOK)
 		{
 			// build our acceleration vector based on keyboard input composite
 			Ogre::Vector3 accel = Ogre::Vector3::ZERO;
