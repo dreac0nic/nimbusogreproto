@@ -25,10 +25,10 @@ Generating, texturing and lighting some basic terrain along with the rest of the
 
 ##### Camera Control
 Controlling the camera in an RTS style.
- * [_] Over-hanging Camera
+ * [X] Over-hanging Camera
  * [_] User Input
-    * [_] Arrow-key Panning
-    * [_] Border-Pushing
+    * [X] Arrow-key Panning
+    * [_] Border-Pushing [In testing]
  * [_] Camera Zoom
  * [_] Proper Height Processing
 
@@ -54,3 +54,7 @@ Project\ogre\boost
 Project\ogre\boost
 Project\ogre\boost\lib
 ```
+
+###### TIP
+After moving OGRE to ./ProjectDir/ogre/, edit ogre/bin/Release/resources.cfg and ogre/bin/debug/resources_d.cfg to include glsl shaders if you plan on using OpenGL
+Additionally, add the OGRE_HOME execution directories to your PATH to run from Visual Studio
