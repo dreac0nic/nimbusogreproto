@@ -16,9 +16,6 @@ This source file is part of the
 */
 #include "NimbusPrototype.h"
 
-#define TERRAIN_SIZE 513
-#define WORLD_SIZE   12000.0f
-
 //-------------------------------------------------------------------------------------
 NimbusPrototype::NimbusPrototype(void)
 {
