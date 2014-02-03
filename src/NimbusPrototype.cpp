@@ -176,8 +176,26 @@ void NimbusPrototype::createScene(void)
 	light->setDiffuseColour(Ogre::ColourValue::White);
 	light->setSpecularColour(Ogre::ColourValue(0.4f, 0.4f, 0.4f));
 
-	// -- Blarge, ambient light ...
+	// -- Add a tiny bit of ambient light.
 	mSceneMgr->setAmbientLight(Ogre::ColourValue(0.1f, 0.1f, 0.1f));
+
+	// Lets make some water!
+	Ogre::Entity* waterEntity;
+	Ogre::Plane waterPlane;
+
+	// Create the plane.
+	waterPlane.normal = Ogre::Vector3::UNIT_Y;
+	waterPlane.d = -1.5;
+
+	Ogre::MeshManager::getSingleton().createPlane("waterPlane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, waterPlane, 8000, 8000, 20, 20, true, 1, 10, 10, Ogre::Vector3::UNIT_Z);
+
+	// Create the water entity.
+	waterEntity = mSceneMgr->createEntity("water", "waterPlane");
+	waterEntity->setMaterialName("Examples/TextureEffect4");
+	
+	Ogre::SceneNode *waterNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("waterNode");
+	waterNode->attachObject(waterEntity);
+	waterNode->translate(0.0f, 100.0f, 0.0f);
 
 	// Create terrain ...
 	mTerrainGlobals = OGRE_NEW Ogre::TerrainGlobalOptions();
@@ -214,24 +232,6 @@ void NimbusPrototype::createScene(void)
 
 	// Add skydome.
 	mSceneMgr->setSkyDome(true, "Examples/CloudySky", 5.0f, 8.0f);
-
-	// Lets make some water!
-	Ogre::Entity* waterEntity;
-	Ogre::Plane waterPlane;
-
-	// Create the plane.
-	waterPlane.normal = Ogre::Vector3::UNIT_Y;
-	waterPlane.d = -1.5;
-
-	Ogre::MeshManager::getSingleton().createPlane("waterPlane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, waterPlane, 8000, 8000, 20, 20, true, 1, 10, 10, Ogre::Vector3::UNIT_Z);
-
-	// Create the water entity.
-	waterEntity = mSceneMgr->createEntity("water", "waterPlane");
-	waterEntity->setMaterialName("Examples/TextureEffect4");
-	
-	Ogre::SceneNode *waterNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("waterNode");
-	waterNode->attachObject(waterEntity);
-	waterNode->translate(0.0f, 100.0f, 0.0f);
 }
 
 //-------------------------------------------------------------------------------------
