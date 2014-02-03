@@ -230,6 +230,8 @@ void NimbusPrototype::createScene(void)
 	waterEntity->setMaterialName("Examples/TextureEffect4");
 	
 	Ogre::SceneNode *waterNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("waterNode");
+	waterNode->attachObject(waterEntity);
+	waterNode->translate(40000, 500, 4000);
 }
 
 //-------------------------------------------------------------------------------------
