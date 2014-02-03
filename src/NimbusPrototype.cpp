@@ -253,11 +253,3 @@ bool NimbusPrototype::frameRenderingQueued(const Ogre::FrameEvent& event)
 
 	return ret;
 }
-
-bool NimbusPrototype::mouseMoved( const OIS::MouseEvent &arg )
-{
-	mDirection.x = arg.state.X.rel;
-	mDirection.z = arg.state.Y.rel;
-
-	return true;
-}

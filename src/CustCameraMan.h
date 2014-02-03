@@ -2,6 +2,7 @@
 #define __CustCameraMan_H__
 
 #include "Ogre.h"
+#include "NimbusPrototype.h"
 #include <limits>
 
 class CustCameraMan : public OgreBites::SdkCameraMan
@@ -49,6 +50,13 @@ public:
 
 		return true;
 	}
+
+	virtual void injectMouseMove(const OIS::MouseEvent& evt)
+	{
+		printf("(%d, %d, %d)\n", evt.state.X.abs, 0, evt.state.Y.abs);
+		mCamera->move(Ogre::Vector3(evt.state.X.rel, 0, evt.state.Y.rel));
+	}
+
 };
 
 #endif

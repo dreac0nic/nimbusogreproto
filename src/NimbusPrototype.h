@@ -52,9 +52,6 @@ protected:
 	virtual void destroyScene(void);
 	virtual bool frameRenderingQueued(const Ogre::FrameEvent& event);
 
-	// OIS::MouseListener
-	virtual bool mouseMoved( const OIS::MouseEvent &arg );
-
 	Ogre::Real mMove;
 	Ogre::Real mZoom;
 	Ogre::SceneNode *mCamNode;
