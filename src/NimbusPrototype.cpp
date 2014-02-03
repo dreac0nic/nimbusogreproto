@@ -122,7 +122,7 @@ void NimbusPrototype::configureTerrainDefaults(Ogre::Light* light)
 	mTerrainGlobals->setMaxPixelError(8);
 	
 	// Test composites.
-	mTerrainGlobals->setCompositeMapDistance(3000);
+	mTerrainGlobals->setCompositeMapDistance(12000);
 
 	// Set map globals for lighting.
 	mTerrainGlobals->setLightMapDirection(light->getDerivedDirection());
@@ -188,7 +188,7 @@ void NimbusPrototype::createScene(void)
 
 	this->configureTerrainDefaults(light);
 	
-	// Define our terrains...?
+	// Define our terrains
 	for(long x = 0; x <= 0; ++x)
 		for(long y = 0; y <= 0; ++y)
 			defineTerrain(x, y);
@@ -214,6 +214,22 @@ void NimbusPrototype::createScene(void)
 
 	// Add skydome.
 	mSceneMgr->setSkyDome(true, "Examples/CloudySky", 5.0f, 8.0f);
+
+	// Lets make some water!
+	Ogre::Entity* waterEntity;
+	Ogre::Plane waterPlane;
+
+	// Create the plane.
+	waterPlane.normal = Ogre::Vector3::UNIT_Y;
+	waterPlane.d = -1.5;
+
+	Ogre::MeshManager::getSingleton().createPlane("waterPlane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, waterPlane, 8000, 8000, 20, 20, true, 1, 10, 10, Ogre::Vector3::UNIT_Z);
+
+	// Create the water entity.
+	waterEntity = mSceneMgr->createEntity("water", "waterPlane");
+	waterEntity->setMaterialName("Examples/TextureEffect4");
+	
+	Ogre::SceneNode *waterNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("waterNode");
 }
 
 //-------------------------------------------------------------------------------------
