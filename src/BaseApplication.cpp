@@ -15,7 +15,6 @@ This source file is part of the
 -----------------------------------------------------------------------------
 */
 #include "BaseApplication.h"
-#include "CustCameraMan.h"
 
 //-------------------------------------------------------------------------------------
 BaseApplication::BaseApplication(void)
@@ -91,9 +90,7 @@ void BaseApplication::createCamera(void)
     mCamera->lookAt(Ogre::Vector3(0,0,-300));
     mCamera->setNearClipDistance(5);
 
-	mSceneMgr->getRootSceneNode()->createChildSceneNode("BasicCamNode");
-
-    mCameraMan = new CustCameraMan(mCamera);   // create a default camera controller
+    mCameraMan = new OgreBites::SdkCameraMan(mCamera);   // create a default camera controller
 }
 //-------------------------------------------------------------------------------------
 void BaseApplication::createFrameListener(void)
@@ -402,7 +399,6 @@ bool BaseApplication::mouseMoved( const OIS::MouseEvent &arg )
 {
     if (mTrayMgr->injectMouseMove(arg)) return true;
     mCameraMan->injectMouseMove(arg);
-	
     return true;
 }
 

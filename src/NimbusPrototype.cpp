@@ -216,10 +216,9 @@ void NimbusPrototype::createScene(void)
 void NimbusPrototype::createFrameListener(void)
 {
 	mCamNode = mSceneMgr->getSceneNode("BasicCamNode");
+	mTopSpeed = 150;
 
 	BaseApplication::createFrameListener();
-
-	mMove = 250;
 
 	mInfoLabel = mTrayMgr->createLabel(OgreBites::TL_TOP, "TInfo", "", 350);
 }
@@ -251,5 +250,109 @@ bool NimbusPrototype::frameRenderingQueued(const Ogre::FrameEvent& event)
 
 	mCamNode->translate(mDirection * event.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
 
+	cameraKeyAccel(event);
+
 	return ret;
+}
+
+
+void NimbusPrototype::cameraKeyAccel(const Ogre::FrameEvent &event)
+{
+	// build our acceleration vector based on keyboard input composite
+	Ogre::Vector3 accel = Ogre::Vector3::ZERO;
+	if (mGoingForward) accel += Ogre::Vector3(mCamera->getDirection().x, 0, mCamera->getDirection().z);
+	if (mGoingBack) accel -= Ogre::Vector3(mCamera->getDirection().x, 0, mCamera->getDirection().z);
+	if (mGoingRight) accel += mCamera->getRight();
+	if (mGoingLeft) accel -= mCamera->getRight();
+	if (mGoingUp) accel += mCamera->getUp();
+	if (mGoingDown) accel -= mCamera->getUp();
+
+	// if accelerating, try to reach top speed in a certain time
+	Ogre::Real topSpeed = mFastMove ? mTopSpeed * 20 : mTopSpeed;
+	if (accel.squaredLength() != 0)
+	{
+		accel.normalise();
+		mVelocity += accel * topSpeed * event.timeSinceLastFrame * 10;
+	}
+	// if not accelerating, try to stop in a certain time
+	else mVelocity -= mVelocity * event.timeSinceLastFrame * 10;
+
+	Ogre::Real tooSmall = std::numeric_limits<Ogre::Real>::epsilon();
+
+	// keep camera velocity below top speed and above epsilon
+	if (mVelocity.squaredLength() > topSpeed * topSpeed)
+	{
+		mVelocity.normalise();
+		mVelocity *= topSpeed;
+	}
+	else if (mVelocity.squaredLength() < tooSmall * tooSmall)
+		mVelocity = Ogre::Vector3::ZERO;
+
+	if (mVelocity != Ogre::Vector3::ZERO) mCamera->move(mVelocity * event.timeSinceLastFrame);
+}
+
+//-------------------------------------------------------------------------------------
+bool NimbusPrototype::mouseMoved(const OIS::MouseEvent &arg)
+{
+	mCamera->move(Ogre::Vector3(arg.state.X.rel, 0, arg.state.Y.rel));
+
+	return true;
+}
+
+//-------------------------------------------------------------------------------------
+bool NimbusPrototype::keyPressed( const OIS::KeyEvent &arg )
+{
+	switch (arg.key)
+	{
+	case OIS::KC_UP:
+	case OIS::KC_W:
+		mGoingForward = true;
+		break;
+
+	case OIS::KC_DOWN:
+	case OIS::KC_S:
+		mGoingBack = true;
+		break;
+
+	case OIS::KC_LEFT:
+	case OIS::KC_A:
+		mGoingLeft = true;
+		break;
+
+	case OIS::KC_RIGHT:
+	case OIS::KC_D:
+		mGoingRight = true;
+		break;
+	}
+
+	return true;
+}
+
+//-------------------------------------------------------------------------------------
+bool NimbusPrototype::keyReleased( const OIS::KeyEvent &arg )
+{
+	switch (arg.key)
+	{
+	case OIS::KC_UP:
+	case OIS::KC_W:
+		mGoingForward = false;
+		break;
+
+	case OIS::KC_DOWN:
+	case OIS::KC_S:
+		mGoingBack = false;
+		break;
+
+	case OIS::KC_LEFT:
+	case OIS::KC_A:
+		mGoingLeft = false;
+		break;
+
+	case OIS::KC_RIGHT:
+	case OIS::KC_D:
+		mGoingRight = false;
+		break;
+	}
+
+	return true;
 }
