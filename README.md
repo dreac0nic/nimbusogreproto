@@ -57,5 +57,8 @@ Project\ogre\boost
 Project\ogre\boost\lib
 ```
 
+### BaseApplication
+The BaseApplication is a simplistic framework class that provides the basic functions of a FrameListener as well as a series of other Ogre objects. We should not be modifying either BaseApplication.h BaseApplication.cpp, but rather overriding its functions using our inheriting class.
+
 ### OgreBites
 OgreBites is a tutorial framework used to make introduction to the OGRE framework easy. We should be avoiding using anything used within this library and any references to it will be phased out with time.
