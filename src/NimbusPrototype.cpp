@@ -215,7 +215,11 @@ void NimbusPrototype::createScene(void)
 //-------------------------------------------------------------------------------------
 void NimbusPrototype::createFrameListener(void)
 {
+	mCamNode = mSceneMgr->getSceneNode("BasicCamNode");
+
 	BaseApplication::createFrameListener();
+
+	mMove = 250;
 
 	mInfoLabel = mTrayMgr->createLabel(OgreBites::TL_TOP, "TInfo", "", 350);
 }
@@ -245,5 +249,103 @@ bool NimbusPrototype::frameRenderingQueued(const Ogre::FrameEvent& event)
 		}
 	}
 
+	mCamNode->translate(mDirection * event.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
+
 	return ret;
+}
+
+bool NimbusPrototype::keyPressed( const OIS::KeyEvent &arg )
+{
+	switch (arg.key)
+	{
+	case OIS::KC_UP:
+	case OIS::KC_W:
+		mDirection.z = -mMove;
+		break;
+
+	case OIS::KC_DOWN:
+	case OIS::KC_S:
+		mDirection.z = mMove;
+		break;
+
+	case OIS::KC_LEFT:
+	case OIS::KC_A:
+		mDirection.x = -mMove;
+		break;
+
+	case OIS::KC_RIGHT:
+	case OIS::KC_D:
+		mDirection.x = mMove;
+		break;
+
+	default:
+		break;
+	}
+
+	return keyPressed(arg);
+}
+
+bool NimbusPrototype::keyReleased( const OIS::KeyEvent &arg )
+{
+	switch (arg.key)
+	{
+	case OIS::KC_UP:
+	case OIS::KC_W:
+		mDirection.z = 0;
+		break;
+
+	case OIS::KC_DOWN:
+	case OIS::KC_S:
+		mDirection.z = 0;
+		break;
+
+	case OIS::KC_LEFT:
+	case OIS::KC_A:
+		mDirection.x = 0;
+		break;
+
+	case OIS::KC_RIGHT:
+	case OIS::KC_D:
+		mDirection.x = 0;
+		break;
+
+	default:
+		break;
+	}
+
+	return keyReleased(arg);
+}
+
+bool NimbusPrototype::mouseMoved( const OIS::MouseEvent &arg )
+{
+	int height = mRoot->getAutoCreatedWindow()->getHeight();
+	int width = mRoot->getAutoCreatedWindow()->getWidth();
+	
+	if (arg.state.X.abs < 20)
+	{
+		mDirection.x = -mMove;
+	}
+	else if (arg.state.X.abs > (width - 20))
+	{
+		mDirection.x = mMove;
+	}
+	else
+	{
+		mDirection.x = 0;
+	}
+
+	if (arg.state.Y.abs < 20)
+	{
+		mDirection.z = -mMove;
+	}
+	else if (arg.state.Y.abs > (height - 20))
+	{
+		mDirection.z = mMove;
+	}
+	else
+	{
+		mDirection.z = 0;
+	}
+
+	return true;
 }
