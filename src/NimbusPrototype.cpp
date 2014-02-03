@@ -34,6 +34,17 @@ void NimbusPrototype::destroyScene(void)
 }
 
 //-------------------------------------------------------------------------------------
+void NimbusPrototype::chooseSceneManager(void)
+{
+	// Create the scene manager.
+	mSceneMgr = mRoot->createSceneManager(Ogre::ST_EXTERIOR_REAL_FAR);
+
+	// Create the OverlaySystem for use in the HUD later.
+	mOverlaySystem = new Ogre::OverlaySystem();
+	mSceneMgr->addRenderQueueListener(mOverlaySystem);
+}
+
+//-------------------------------------------------------------------------------------
 void getTerrainImage(bool flipX, bool flipY, Ogre::Image& img)
 {
 	img.load("terrain.png", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
