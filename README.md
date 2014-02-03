@@ -14,13 +14,13 @@ Will focus on implementation of:
 ##### Terrain Generation
 Generating, texturing and lighting some basic terrain along with the rest of the world.
  * [X] Proper Scene Manager
- * [_] Heightmap/dat Generation
+ * [_] Refined Heightmap/dat Generation [SpenSer]
  * [_] Lighting/shadow maps
     * [_] Possible bump-mapping
  * [_] Environment Initialization
     * [_] Render to Geometry
 	* [_] Texture Layering
- * [_] Water [SpenSer]
+ * [_] Water
     * [_] Land -> Water Smoothing
 
 ##### Camera Control
