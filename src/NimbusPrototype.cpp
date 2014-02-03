@@ -65,10 +65,11 @@ void NimbusPrototype::defineTerrain(long x, long y)
 //-------------------------------------------------------------------------------------
 void NimbusPrototype::initBlendMaps(Ogre::Terrain* terrain)
 {
-	// BLARGE DOCUMENT LATER JGNLKAJSDNGFLKAJSDNLKAJSNBLFASBHABSLFBALDSKJHFBLSAJKSDDHbfLKJABSFLKJBSALFKJBSALKJDBASLKJFHBALKJDGNLIUASNLIUABEWF
+	// Create blend maps for texture blending
 	Ogre::TerrainLayerBlendMap* blendMap0 = terrain->getLayerBlendMap(1);
 	Ogre::TerrainLayerBlendMap* blendMap1 = terrain->getLayerBlendMap(2);
 
+	// Set up default terrain settings
 	Ogre::Real minHeight0 = 70;
 	Ogre::Real fadeDist0 = 40;
 	Ogre::Real minHeight1 = 70;
@@ -96,10 +97,12 @@ void NimbusPrototype::initBlendMaps(Ogre::Terrain* terrain)
 			*pBlend1++ = val;
 		}
 	}
-
+	
+	// Set blend maps to be updated
 	blendMap0->dirty();
 	blendMap1->dirty();
 
+	// Update blend maps
 	blendMap0->update();
 	blendMap1->update();
 }
@@ -159,11 +162,11 @@ void NimbusPrototype::createScene(void)
 	Ogre::Vector3 lightdir(0.55f, -0.3f, 0.75f);
 	lightdir.normalise();
 
-	Ogre::Light* light = mSceneMgr->createLight("tstLight");
-	light->setType(Ogre::Light::LT_DIRECTIONAL);
-	light->setDirection(lightdir);
-	light->setDiffuseColour(Ogre::ColourValue::White);
-	light->setSpecularColour(Ogre::ColourValue(0.4f, 0.4f, 0.4f));
+	Ogre::Light* sunLight = mSceneMgr->createLight("sceneLight");
+	sunLight->setType(Ogre::Light::LT_DIRECTIONAL);
+	sunLight->setDirection(lightdir);
+	sunLight->setDiffuseColour(Ogre::ColourValue::White);
+	sunLight->setSpecularColour(Ogre::ColourValue(0.4f, 0.4f, 0.4f));
 
 	// -- Blarge, ambient light ...
 	mSceneMgr->setAmbientLight(Ogre::ColourValue(0.2f, 0.2f, 0.2f));
@@ -175,7 +178,7 @@ void NimbusPrototype::createScene(void)
 	mTerrainGroup->setFilenameConvention(Ogre::String("BasicTutorial3Terrain"), Ogre::String("dat")); // TERRAIN LOADING
 	mTerrainGroup->setOrigin(Ogre::Vector3::ZERO);
 
-	this->configureTerrainDefaults(light);
+	this->configureTerrainDefaults(sunLight);
 	
 	// Define our terrains...?
 	for(long x = 0; x <= 0; ++x)
