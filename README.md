@@ -44,7 +44,7 @@ Currently does not include OGRE library files for the sake of repository integri
 
 To properly install OGRE, copy the contents of the OGRE folder into ./ProjectDir/ogre/
 ###### Example
-```Bash
+```
 Project\ogre\bin
 Project\ogre\CMake
 Project\ogre\Docs
