@@ -177,7 +177,7 @@ void NimbusPrototype::createScene(void)
 	light->setSpecularColour(Ogre::ColourValue(0.4f, 0.4f, 0.4f));
 
 	// -- Blarge, ambient light ...
-	mSceneMgr->setAmbientLight(Ogre::ColourValue(0.2f, 0.2f, 0.2f));
+	mSceneMgr->setAmbientLight(Ogre::ColourValue(0.1f, 0.1f, 0.1f));
 
 	// Create terrain ...
 	mTerrainGlobals = OGRE_NEW Ogre::TerrainGlobalOptions();
