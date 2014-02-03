@@ -231,6 +231,7 @@ void NimbusPrototype::createScene(void)
 	
 	Ogre::SceneNode *waterNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("waterNode");
 	waterNode->attachObject(waterEntity);
+	waterNode->translate(0.0f, 100.0f, 0.0f);
 }
 
 //-------------------------------------------------------------------------------------
