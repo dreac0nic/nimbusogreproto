@@ -39,6 +39,7 @@ Controlling the camera in an RTS style.
 
 ## NOTES
 ### Installation
+We will be using the 1.9 (11.29.2013) VS2012 SDK. This download can be found at http://www.ogre3d.org/download/sdk
 Currently does not include OGRE library files for the sake of repository integrity. May be included in a future version.
 
 To properly install OGRE, copy the contents of the OGRE folder into ./ProjectDir/ogre/
