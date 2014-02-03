@@ -13,29 +13,29 @@ Will focus on implementation of:
 ### Current Task List
 ##### Terrain Generation
 Generating, texturing and lighting some basic terrain along with the rest of the world.
- * [ ] Proper Scene Manager [SpenSer]
- * [ ] Heightmap/dat Generation
- * [ ] Lighting/shadow maps
-    * [ ] Possible bump-mapping
- * [ ] Environment Initialization
-    * [ ] Render to Geometry
-	* [ ] Texture Layering
- * [ ] Water
-    * [ ] Land -> Water Smoothing
+ * [_] Proper Scene Manager [SpenSer]
+ * [_] Heightmap/dat Generation
+ * [_] Lighting/shadow maps
+    * [_] Possible bump-mapping
+ * [_] Environment Initialization
+    * [_] Render to Geometry
+	* [_] Texture Layering
+ * [_] Water
+    * [_] Land -> Water Smoothing
 
 ##### Camera Control
 Controlling the camera in an RTS style.
- * [ ] Over-hanging Camera
- * [ ] User Input
-    * [ ] Arrow-key Panning
-    * [ ] Border-Pushing
- * [ ] Camera Zoom
- * [ ] Proper Height Processing
+ * [_] Over-hanging Camera
+ * [_] User Input
+    * [_] Arrow-key Panning
+    * [_] Border-Pushing
+ * [_] Camera Zoom
+ * [_] Proper Height Processing
 
 ##### Example Gameplay Mechanics
- * [ ] Vector Fields
- * [ ] Cloud Objects
- * [ ] Wind Manipulation
+ * [_] Vector Fields
+ * [_] Cloud Objects
+ * [_] Wind Manipulation
 
 ## NOTES
 Currently does not include OGRE library files for the sake of repository integrity. May be included in a future version.
