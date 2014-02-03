@@ -148,9 +148,13 @@ void NimbusPrototype::configureTerrainDefaults(Ogre::Light* light)
 //-------------------------------------------------------------------------------------
 void NimbusPrototype::createScene(void)
 {
+	// Variables
+	cameraLookAt = Ogre::Vector3(2150, 50, 1500);
+	cameraPosition = Ogre::Vector3(cameraLookAt.x, cameraLookAt.y + 2450, cameraLookAt.z - 1200);
+
 	// Setup camera, actually using a FAR CLIP PLANE this time.
-	mCamera->setPosition(Ogre::Vector3(1683, 50, 2116));
-	mCamera->lookAt(Ogre::Vector3(1963, 50, 1660));
+	mCamera->setPosition(cameraPosition);
+	mCamera->lookAt(cameraLookAt);
 	mCamera->setNearClipDistance(0.1f);
 	mCamera->setFarClipDistance(50000.0f);
 

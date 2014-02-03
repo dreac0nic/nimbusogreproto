@@ -39,6 +39,9 @@ private:
 	void initBlendMaps(Ogre::Terrain* terrain);
 	void configureTerrainDefaults(Ogre::Light* light);
 
+	Ogre::Vector3 cameraLookAt;
+	Ogre::Vector3 cameraPosition;
+
 public:
     NimbusPrototype(void);
     virtual ~NimbusPrototype(void);
