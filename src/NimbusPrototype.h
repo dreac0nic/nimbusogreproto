@@ -22,9 +22,6 @@ This source file is part of the
 
 #include "BaseApplication.h"
 
-#define TERRAIN_SIZE 513
-#define WORLD_SIZE   12000.0f
-
 class NimbusPrototype : public BaseApplication
 {
 private:

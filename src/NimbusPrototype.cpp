@@ -131,8 +131,8 @@ void NimbusPrototype::configureTerrainDefaults(Ogre::Light* light)
 
 	// Configure the settings for importing.
 	Ogre::Terrain::ImportData& importConfig = mTerrainGroup->getDefaultImportSettings();
-	importConfig.terrainSize = TERRAIN_SIZE;
-	importConfig.worldSize = WORLD_SIZE;
+	importConfig.terrainSize = 513;
+	importConfig.worldSize = 12000.0f;
 	importConfig.inputScale = 600;
 	importConfig.minBatchSize = 33;
 	importConfig.maxBatchSize = 65;
