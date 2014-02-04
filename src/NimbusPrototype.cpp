@@ -215,10 +215,31 @@ void NimbusPrototype::createScene(void)
 //-------------------------------------------------------------------------------------
 void NimbusPrototype::createFrameListener(void)
 {
+	OIS::ParamList paramList;
+
+	// Setup max camera speed per frame
 	mTopSpeed = 150;
 
+	// Call our parent
 	BaseApplication::createFrameListener();
 
+	// Setup default parameters for OIS's input manager
+#if defined OIS_WIN32_PLATFORM
+	paramList.insert(std::make_pair(std::string("w32_mouse"), std::string("DISCL_FOREGROUND" )));
+	paramList.insert(std::make_pair(std::string("w32_mouse"), std::string("DISCL_NONEXCLUSIVE")));
+	paramList.insert(std::make_pair(std::string("w32_keyboard"), std::string("DISCL_FOREGROUND")));
+	paramList.insert(std::make_pair(std::string("w32_keyboard"), std::string("DISCL_NONEXCLUSIVE")));
+#elif defined OIS_LINUX_PLATFORM
+	paramList.insert(std::make_pair(std::string("x11_mouse_grab"), std::string("false")));
+	paramList.insert(std::make_pair(std::string("x11_mouse_hide"), std::string("false")));
+	paramList.insert(std::make_pair(std::string("x11_keyboard_grab"), std::string("false")));
+	paramList.insert(std::make_pair(std::string("XAutoRepeatOn"), std::string("true")));
+#endif
+
+	// Override input manager with OIS's keyboard + mouse info
+	mInputManager = OIS::InputManager::createInputSystem(paramList);
+
+	// Create our info label
 	mInfoLabel = mTrayMgr->createLabel(OgreBites::TL_TOP, "TInfo", "", 350);
 }
 
