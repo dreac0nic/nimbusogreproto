@@ -122,7 +122,7 @@ void NimbusPrototype::configureTerrainDefaults(Ogre::Light* light)
 	mTerrainGlobals->setMaxPixelError(8);
 	
 	// Test composites.
-	mTerrainGlobals->setCompositeMapDistance(12000);
+	mTerrainGlobals->setCompositeMapDistance(12000.0f*10);
 
 	// Set map globals for lighting.
 	mTerrainGlobals->setLightMapDirection(light->getDerivedDirection());
@@ -200,7 +200,7 @@ void NimbusPrototype::createScene(void)
 	// Create terrain ...
 	mTerrainGlobals = OGRE_NEW Ogre::TerrainGlobalOptions();
 
-	mTerrainGroup = OGRE_NEW Ogre::TerrainGroup(mSceneMgr, Ogre::Terrain::ALIGN_X_Z, TERRAIN_SIZE, WORLD_SIZE);
+	mTerrainGroup = OGRE_NEW Ogre::TerrainGroup(mSceneMgr, Ogre::Terrain::ALIGN_X_Z, 12000.0f, 600);
 	mTerrainGroup->setFilenameConvention(Ogre::String("NimbusTerrain"), Ogre::String("dat")); // TERRAIN LOADING
 	mTerrainGroup->setOrigin(Ogre::Vector3::ZERO);
 
