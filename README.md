@@ -13,8 +13,8 @@ Will focus on implementation of:
 ### Current Task List
 ##### Terrain Generation
 Generating, texturing and lighting some basic terrain along with the rest of the world.
- * [_] Proper Scene Manager [SpenSer]
- * [_] Heightmap/dat Generation
+ * [X] Proper Scene Manager
+ * [_] Refined Heightmap/dat Generation [SpenSer]
  * [_] Lighting/shadow maps
     * [_] Possible bump-mapping
  * [_] Environment Initialization
@@ -38,6 +38,8 @@ Controlling the camera in an RTS style.
  * [_] Wind Manipulation
 
 ## NOTES
+### Installation
+We will be using the 1.9 (11.29.2013) VS2012 SDK. This download can be found at [here](http://www.ogre3d.org/download/sdk)
 Currently does not include OGRE library files for the sake of repository integrity. May be included in a future version.
 
 To properly install OGRE, copy the contents of the OGRE folder into ./ProjectDir/ogre/
@@ -54,3 +56,9 @@ Project\ogre\boost
 Project\ogre\boost
 Project\ogre\boost\lib
 ```
+
+### BaseApplication
+The BaseApplication is a simplistic framework class that provides the basic functions of a FrameListener as well as a series of other Ogre objects. We should not be modifying either BaseApplication.h BaseApplication.cpp, but rather overriding its functions using our inheriting class.
+
+### OgreBites
+OgreBites is a tutorial framework used to make introduction to the OGRE framework easy. We should be avoiding using anything used within this library and any references to it will be phased out with time.
