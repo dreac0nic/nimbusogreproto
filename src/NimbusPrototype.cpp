@@ -85,7 +85,7 @@ void NimbusPrototype::initBlendMaps(Ogre::Terrain* terrain)
 			Ogre::Real tx, ty;
 
 			blendMap0->convertImageToTerrainSpace(x, y, &tx, &ty);
-			
+
 			Ogre::Real height = terrain->getHeightAtTerrainPosition(tx, ty);
 			Ogre::Real val = (height - minHeight0)/fadeDist0;
 
@@ -97,7 +97,7 @@ void NimbusPrototype::initBlendMaps(Ogre::Terrain* terrain)
 			*pBlend1++ = val;
 		}
 	}
-	
+
 	// Set blend maps to be updated
 	blendMap0->dirty();
 	blendMap1->dirty();
@@ -112,7 +112,7 @@ void NimbusPrototype::configureTerrainDefaults(Ogre::Light* light)
 {
 	// Configure globals.
 	mTerrainGlobals->setMaxPixelError(8);
-	
+
 	// Test composites.
 	mTerrainGlobals->setCompositeMapDistance(3000);
 
@@ -131,7 +131,7 @@ void NimbusPrototype::configureTerrainDefaults(Ogre::Light* light)
 
 	// Load some textures!
 	importConfig.layerList.resize(3);
-	
+
 	importConfig.layerList[0].worldSize = 100;
 	importConfig.layerList[0].textureNames.push_back("dirt_grayrocky_diffusespecular.dds");
 	importConfig.layerList[0].textureNames.push_back("dirt_grayrocky_normalheight.dds");
@@ -183,7 +183,7 @@ void NimbusPrototype::createScene(void)
 	mTerrainGroup->setOrigin(Ogre::Vector3::ZERO);
 
 	this->configureTerrainDefaults(sunLight);
-	
+
 	// Define our terrains...?
 	for(long x = 0; x <= 0; ++x)
 		for(long y = 0; y <= 0; ++y)
@@ -215,7 +215,6 @@ void NimbusPrototype::createScene(void)
 //-------------------------------------------------------------------------------------
 void NimbusPrototype::createFrameListener(void)
 {
-	mCamNode = mSceneMgr->getSceneNode("BasicCamNode");
 	mTopSpeed = 150;
 
 	BaseApplication::createFrameListener();
@@ -226,8 +225,37 @@ void NimbusPrototype::createFrameListener(void)
 //-------------------------------------------------------------------------------------
 bool NimbusPrototype::frameRenderingQueued(const Ogre::FrameEvent& event)
 {
-	bool ret = BaseApplication::frameRenderingQueued(event);
+	// Set an expected return value
+	bool ret = true;
 
+	// Run some preliminary checks
+	if(mWindow->isClosed())
+		return false;
+
+	if(mShutDown)
+		return false;
+
+	// Capture devices
+	mInputContext.capture();
+
+	mTrayMgr->frameRenderingQueued(event);
+
+	// Check dialog status without having a cameraman
+	if (!mTrayMgr->isDialogVisible())
+	{
+		if (mDetailsPanel->isVisible())   // if details panel is visible, then update its contents
+		{
+			mDetailsPanel->setParamValue(0, Ogre::StringConverter::toString(mCamera->getDerivedPosition().x));
+			mDetailsPanel->setParamValue(1, Ogre::StringConverter::toString(mCamera->getDerivedPosition().y));
+			mDetailsPanel->setParamValue(2, Ogre::StringConverter::toString(mCamera->getDerivedPosition().z));
+			mDetailsPanel->setParamValue(4, Ogre::StringConverter::toString(mCamera->getDerivedOrientation().w));
+			mDetailsPanel->setParamValue(5, Ogre::StringConverter::toString(mCamera->getDerivedOrientation().x));
+			mDetailsPanel->setParamValue(6, Ogre::StringConverter::toString(mCamera->getDerivedOrientation().y));
+			mDetailsPanel->setParamValue(7, Ogre::StringConverter::toString(mCamera->getDerivedOrientation().z));
+		}
+	}
+
+	// Set a widget on the screen for relevant information to the user about loading
 	if(mTerrainGroup->isDerivedDataUpdateInProgress())
 	{
 		mTrayMgr->moveWidgetToTray(mInfoLabel, OgreBites::TL_TOP, 0);
@@ -236,6 +264,7 @@ bool NimbusPrototype::frameRenderingQueued(const Ogre::FrameEvent& event)
 		if(mTerrainsImported) mInfoLabel->setCaption("Building terrain, please wait ...");
 		else mInfoLabel->setCaption("Updating textures, please wait ...");
 	}
+	// Kill the tray when we're done with it
 	else
 	{
 		mTrayMgr->removeWidgetFromTray(mInfoLabel);
@@ -248,15 +277,13 @@ bool NimbusPrototype::frameRenderingQueued(const Ogre::FrameEvent& event)
 		}
 	}
 
-	mCamNode->translate(mDirection * event.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
-
-	cameraKeyAccel(event);
+	ret = (ret && cameraAccel(event));
 
 	return ret;
 }
 
 
-void NimbusPrototype::cameraKeyAccel(const Ogre::FrameEvent &event)
+bool NimbusPrototype::cameraAccel(const Ogre::FrameEvent &event)
 {
 	// build our acceleration vector based on keyboard input composite
 	Ogre::Vector3 accel = Ogre::Vector3::ZERO;
@@ -264,8 +291,6 @@ void NimbusPrototype::cameraKeyAccel(const Ogre::FrameEvent &event)
 	if (mGoingBack) accel -= Ogre::Vector3(mCamera->getDirection().x, 0, mCamera->getDirection().z);
 	if (mGoingRight) accel += mCamera->getRight();
 	if (mGoingLeft) accel -= mCamera->getRight();
-	if (mGoingUp) accel += mCamera->getUp();
-	if (mGoingDown) accel -= mCamera->getUp();
 
 	// if accelerating, try to reach top speed in a certain time
 	Ogre::Real topSpeed = mFastMove ? mTopSpeed * 20 : mTopSpeed;
@@ -289,12 +314,35 @@ void NimbusPrototype::cameraKeyAccel(const Ogre::FrameEvent &event)
 		mVelocity = Ogre::Vector3::ZERO;
 
 	if (mVelocity != Ogre::Vector3::ZERO) mCamera->move(mVelocity * event.timeSinceLastFrame);
+
+	return true;
 }
 
 //-------------------------------------------------------------------------------------
 bool NimbusPrototype::mouseMoved(const OIS::MouseEvent &arg)
 {
-	mCamera->move(Ogre::Vector3(arg.state.X.rel, 0, arg.state.Y.rel));
+	int width = mRoot->getAutoCreatedWindow()->getWidth();
+	int height = mRoot->getAutoCreatedWindow()->getHeight();
+	
+	if (arg.state.X.abs < MOUSE_PUSH_DISTANCE)
+		mGoingLeft = true;
+	else
+		mGoingLeft = false;
+	
+	if (arg.state.X.abs > width - MOUSE_PUSH_DISTANCE)
+		mGoingRight = true;
+	else
+		mGoingRight = false;
+
+	if (arg.state.Y.abs < MOUSE_PUSH_DISTANCE)
+		mGoingForward = true;
+	else
+		mGoingForward = false;
+
+	if (arg.state.Y.abs > height - MOUSE_PUSH_DISTANCE)
+		mGoingBack = true;
+	else
+		mGoingBack = false;
 
 	return true;
 }
@@ -325,7 +373,98 @@ bool NimbusPrototype::keyPressed( const OIS::KeyEvent &arg )
 		break;
 	}
 
-	return true;
+	return baseKeyPressFunc(arg);
+}
+
+bool NimbusPrototype::baseKeyPressFunc(const OIS::KeyEvent &arg)
+{
+	if (mTrayMgr->isDialogVisible()) return true;   // don't process any more keys if dialog is up
+
+	if (arg.key == OIS::KC_F)   // toggle visibility of advanced frame stats
+	{
+		mTrayMgr->toggleAdvancedFrameStats();
+	}
+	else if (arg.key == OIS::KC_G)   // toggle visibility of even rarer debugging details
+	{
+		if (mDetailsPanel->getTrayLocation() == OgreBites::TL_NONE)
+		{
+			mTrayMgr->moveWidgetToTray(mDetailsPanel, OgreBites::TL_TOPRIGHT, 0);
+			mDetailsPanel->show();
+		}
+		else
+		{
+			mTrayMgr->removeWidgetFromTray(mDetailsPanel);
+			mDetailsPanel->hide();
+		}
+	}
+	else if (arg.key == OIS::KC_T)   // cycle polygon rendering mode
+	{
+		Ogre::String newVal;
+		Ogre::TextureFilterOptions tfo;
+		unsigned int aniso;
+
+		switch (mDetailsPanel->getParamValue(9).asUTF8()[0])
+		{
+		case 'B':
+			newVal = "Trilinear";
+			tfo = Ogre::TFO_TRILINEAR;
+			aniso = 1;
+			break;
+		case 'T':
+			newVal = "Anisotropic";
+			tfo = Ogre::TFO_ANISOTROPIC;
+			aniso = 8;
+			break;
+		case 'A':
+			newVal = "None";
+			tfo = Ogre::TFO_NONE;
+			aniso = 1;
+			break;
+		default:
+			newVal = "Bilinear";
+			tfo = Ogre::TFO_BILINEAR;
+			aniso = 1;
+		}
+
+		Ogre::MaterialManager::getSingleton().setDefaultTextureFiltering(tfo);
+		Ogre::MaterialManager::getSingleton().setDefaultAnisotropy(aniso);
+		mDetailsPanel->setParamValue(9, newVal);
+	}
+	else if (arg.key == OIS::KC_R)   // cycle polygon rendering mode
+	{
+		Ogre::String newVal;
+		Ogre::PolygonMode pm;
+
+		switch (mCamera->getPolygonMode())
+		{
+		case Ogre::PM_SOLID:
+			newVal = "Wireframe";
+			pm = Ogre::PM_WIREFRAME;
+			break;
+		case Ogre::PM_WIREFRAME:
+			newVal = "Points";
+			pm = Ogre::PM_POINTS;
+			break;
+		default:
+			newVal = "Solid";
+			pm = Ogre::PM_SOLID;
+		}
+
+		mCamera->setPolygonMode(pm);
+		mDetailsPanel->setParamValue(10, newVal);
+	}
+	else if(arg.key == OIS::KC_F5)   // refresh all textures
+	{
+		Ogre::TextureManager::getSingleton().reloadAll();
+	}
+	else if (arg.key == OIS::KC_SYSRQ)   // take a screenshot
+	{
+		mWindow->writeContentsToTimestampedFile("screenshot", ".jpg");
+	}
+	else if (arg.key == OIS::KC_ESCAPE)
+	{
+		mShutDown = true;
+	}
 }
 
 //-------------------------------------------------------------------------------------
@@ -354,5 +493,18 @@ bool NimbusPrototype::keyReleased( const OIS::KeyEvent &arg )
 		break;
 	}
 
-	return true;
+	return true; // __super::keyReleased(arg);
+}
+
+//-------------------------------------------------------------------------------------
+void NimbusPrototype::createCamera(void)
+{
+	// Create the camera
+	mCamera = mSceneMgr->createCamera("HoverCam");
+
+	// Position it at 500 in Z direction
+	mCamera->setPosition(Ogre::Vector3(0,0,80));
+	// Look back along -Z
+	mCamera->lookAt(Ogre::Vector3(0,0,-300));
+	mCamera->setNearClipDistance(5);
 }
