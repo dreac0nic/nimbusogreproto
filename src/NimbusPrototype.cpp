@@ -362,6 +362,8 @@ bool NimbusPrototype::mouseMoved(const OIS::MouseEvent &arg)
 		mGoingBack = true;
 	else
 		mGoingBack = false;
+	
+
 
 	return true;
 }
@@ -489,6 +491,7 @@ bool NimbusPrototype::baseKeyPressFunc(const OIS::KeyEvent &arg)
 //-------------------------------------------------------------------------------------
 bool NimbusPrototype::keyReleased( const OIS::KeyEvent &arg )
 {
+	// Set up WASD and arrow key camera movement
 	switch (arg.key)
 	{
 	case OIS::KC_UP:
@@ -512,7 +515,7 @@ bool NimbusPrototype::keyReleased( const OIS::KeyEvent &arg )
 		break;
 	}
 
-	return true; // __super::keyReleased(arg);
+	return true;
 }
 
 //-------------------------------------------------------------------------------------
@@ -526,4 +529,6 @@ void NimbusPrototype::createCamera(void)
 	// Look back along -Z
 	mCamera->lookAt(Ogre::Vector3(0,0,-300));
 	mCamera->setNearClipDistance(5);
+
+	mZoom = 100;
 }
