@@ -135,11 +135,11 @@ void NimbusPrototype::configureTerrainDefaults(Ogre::Light* light)
 
 	// Configure the settings for importing.
 	Ogre::Terrain::ImportData& importConfig = mTerrainGroup->getDefaultImportSettings();
-	importConfig.terrainSize = 513;
+	importConfig.terrainSize = 512 + 1;
 	importConfig.worldSize = 12000.0f;
 	importConfig.inputScale = 600;
-	importConfig.minBatchSize = 33;
-	importConfig.maxBatchSize = 65;
+	importConfig.minBatchSize = 32 + 1;
+	importConfig.maxBatchSize = 64 + 1;
 
 	// Load some textures!
 	importConfig.layerList.resize(3);
@@ -191,7 +191,7 @@ void NimbusPrototype::createScene(void)
 	waterPlane.normal = Ogre::Vector3::UNIT_Y;
 	waterPlane.d = -1.5;
 
-	Ogre::MeshManager::getSingleton().createPlane("waterPlane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, waterPlane, 8000, 8000, 20, 20, true, 1, 10, 10, Ogre::Vector3::UNIT_Z);
+	Ogre::MeshManager::getSingleton().createPlane("waterPlane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, waterPlane, 12000.0f*3, 12000.0f*3, 20, 20, true, 1, 10, 10, Ogre::Vector3::UNIT_Z);
 
 	// Create the water entity.
 	waterEntity = mSceneMgr->createEntity("water", "waterPlane");
@@ -204,15 +204,15 @@ void NimbusPrototype::createScene(void)
 	// Create terrain ...
 	mTerrainGlobals = OGRE_NEW Ogre::TerrainGlobalOptions();
 
-	mTerrainGroup = OGRE_NEW Ogre::TerrainGroup(mSceneMgr, Ogre::Terrain::ALIGN_X_Z, 513, 12000.0f);
+	mTerrainGroup = OGRE_NEW Ogre::TerrainGroup(mSceneMgr, Ogre::Terrain::ALIGN_X_Z, 512 + 1, 12000.0f);
 	mTerrainGroup->setFilenameConvention(Ogre::String("NimbusTerrain"), Ogre::String("dat")); // TERRAIN LOADING
 	mTerrainGroup->setOrigin(Ogre::Vector3::ZERO);
 
 	this->configureTerrainDefaults(light);
 	
 	// Define our terrains
-	for(long x = 0; x <= 2; ++x)
-		for(long y = 0; y <= 2; ++y)
+	for(long x = -1; x <= 1; ++x)
+		for(long y = -1; y <= 1; ++y)
 			defineTerrain(x, y);
 
 	// Force loading of all terrains before starting application.
