@@ -284,7 +284,7 @@ bool NimbusPrototype::cameraAccel(const Ogre::FrameEvent &event)
 	if (mGoingLeft || mMouseGoingLeft) accel -= mCamera->getRight();
 
 	// if accelerating, try to reach top speed in a certain time
-	Ogre::Real topSpeed = mFastMove ? mTopSpeed * 20 : mTopSpeed;
+	Ogre::Real topSpeed = mFastMove ? mTopSpeed * 20 * 2 : mTopSpeed * 20;
 	if (accel.squaredLength() != 0)
 	{
 		accel.normalise();
@@ -357,26 +357,27 @@ bool NimbusPrototype::mouseMoved(const OIS::MouseEvent &arg)
 		Ogre::Vector3 focalPoint;
 
 		// Move the zoom!
-		mZoom = mZoom - (arg.state.Z.rel / 120.0f);
+		mZoom += (arg.state.Z.rel / 120.0f / 7.0f);
 
-		printf("Zoom Rel: %d\nZoom: fd\n", (arg.state.Z.rel / 120.0f), mZoom);
+		std::cout << "Zoom Rel: " << (arg.state.Z.rel / 120.0f) << "\nZoom: " << mZoom << std::endl;
 
 		// Sanitize data to be within bounds
 		if (mZoom > ZOOM_MAX) mZoom = ZOOM_MAX;
 		if (mZoom < ZOOM_MIN) mZoom = ZOOM_MIN;
 
-		focalPoint = mCamera->getPosition() - Ogre::Vector3(
-			0, // X
-			300 + ((-400 + (mZoom/ZOOM_MAX*1200))*(-400 + (mZoom/ZOOM_MAX*1200))/290), // Y
-			400 + (1200/ZOOM_MAX) * mZoom // Z
-			);
+		focalPoint = mCamera->getPosition() - Ogre::Vector3(0, // X
+			300 + (800 / ZOOM_MAX * mZoom)*(800 / ZOOM_MAX * mZoom)/290.0f, // Y
+			400 + (800 / ZOOM_MAX) * mZoom /* Z */) + Ogre::Vector3(0, // X
+			300 + 800*800/290.0f, // Y
+			400 + 800 // Z
+			) - Ogre::Vector3(0, 2450, 1200);
 
-		zoomVelocity.y = (-400 + (mZoom/ZOOM_MAX*1200))*(-400 + (mZoom/ZOOM_MAX*1200))
-			- (-400 + (mZoomOld/ZOOM_MAX*1200))*(-400 + (mZoomOld/ZOOM_MAX*1200));
-		zoomVelocity.z = ((1200/ZOOM_MAX) * mZoom) - ((1200/ZOOM_MAX) * mZoomOld);
+		zoomVelocity.y = (800 / ZOOM_MAX * mZoom)*(800 / ZOOM_MAX * mZoom)/290.0f
+			- (800 / ZOOM_MAX * mZoomOld)*(800 / ZOOM_MAX * mZoomOld)/290.0f;
+		zoomVelocity.z = ((800/ZOOM_MAX) * mZoom) - ((800/ZOOM_MAX) * mZoomOld);
 
 		mCamera->move(zoomVelocity);
-		mCamera->lookAt(focalPoint + zoomVelocity);
+		mCamera->lookAt(focalPoint);
 	}
 
 	return true;
@@ -515,6 +516,7 @@ void NimbusPrototype::createCamera(void)
 	mMouseGoingBack = false;
 	mMouseGoingLeft = false;
 	mMouseGoingRight = false;
+	mFastMove = false;
 
 	// Create the camera
 	mCamera = mSceneMgr->createCamera("HoverCam");
