@@ -22,6 +22,7 @@ namespace Nimbus
 	 */
 	void WorldManager::init(void)
 	{
+		// After we're all done, mark as initialized
 		this->initialized = true;
 	}
 
