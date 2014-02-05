@@ -145,15 +145,7 @@ void NimbusPrototype::configureTerrainDefaults(Ogre::Light* light)
 //-------------------------------------------------------------------------------------
 void NimbusPrototype::createScene(void)
 {
-	// Setup camera, actually using a FAR CLIP PLANE this time.
-	mCamera->setPosition(Ogre::Vector3(1683, 50, 2116));
-	mCamera->lookAt(Ogre::Vector3(1963, 50, 1660));
-	mCamera->setNearClipDistance(0.1f);
-	mCamera->setFarClipDistance(50000.0f);
-
-	// Setup infinite far clip plane, if supported.
-	if(mRoot->getRenderSystem()->getCapabilities()->hasCapability(Ogre::RSC_INFINITE_FAR_PLANE))
-		mCamera->setFarClipDistance(0);
+	NimbusPrototype::createCamera();
 
 	// Setup some lighting.
 	Ogre::Vector3 lightdir(0.55f, -0.3f, 0.75f);
@@ -206,6 +198,31 @@ void NimbusPrototype::createScene(void)
 }
 
 //-------------------------------------------------------------------------------------
+void NimbusPrototype::createCamera(void)
+{
+    // Create the camera
+    mCamera = mSceneMgr->createCamera("PlayerCam");
+
+   	// Setup camera, actually using a FAR CLIP PLANE this time.
+	mCamera->setPosition(Ogre::Vector3(1683, 50, 2116));
+	mCamera->lookAt(Ogre::Vector3(1963, 50, 1660));
+	mCamera->setNearClipDistance(0.1f);
+	mCamera->setFarClipDistance(50000.0f);
+
+	// Setup infinite far clip plane, if supported.
+	if(mRoot->getRenderSystem()->getCapabilities()->hasCapability(Ogre::RSC_INFINITE_FAR_PLANE))
+		mCamera->setFarClipDistance(0);
+	
+	//setting camera manager	
+	if (cameraManager.setCamera(mCamera)!= SET_CAMERA_SUCESSFUL)
+	{
+		//failed to pass camera
+		exit(1);
+	}
+		
+}
+
+//-------------------------------------------------------------------------------------
 void NimbusPrototype::createFrameListener(void)
 {
 	BaseApplication::createFrameListener();
@@ -214,10 +231,41 @@ void NimbusPrototype::createFrameListener(void)
 }
 
 //-------------------------------------------------------------------------------------
-bool NimbusPrototype::frameRenderingQueued(const Ogre::FrameEvent& event)
+bool NimbusPrototype::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
-	bool ret = BaseApplication::frameRenderingQueued(event);
+	//this is grabbed from the BaseApplication::frameREnderingQueued
+{
+    if(mWindow->isClosed())
+        return false;
 
+    if(mShutDown)
+        return false;
+
+    //Need to capture/update each device
+    /* // Fix for 1.9
+	mKeyboard->capture();
+    mMouse->capture(); // */
+	mInputContext.capture();
+	
+    mTrayMgr->frameRenderingQueued(evt);
+
+    if (!mTrayMgr->isDialogVisible())
+    {
+		cameraManager.frameRenderingQueued(evt);   // if dialog isn't up, then update the camera
+        if (mDetailsPanel->isVisible())   // if details panel is visible, then update its contents
+        {
+            mDetailsPanel->setParamValue(0, Ogre::StringConverter::toString(mCamera->getDerivedPosition().x));
+            mDetailsPanel->setParamValue(1, Ogre::StringConverter::toString(mCamera->getDerivedPosition().y));
+            mDetailsPanel->setParamValue(2, Ogre::StringConverter::toString(mCamera->getDerivedPosition().z));
+            mDetailsPanel->setParamValue(4, Ogre::StringConverter::toString(mCamera->getDerivedOrientation().w));
+            mDetailsPanel->setParamValue(5, Ogre::StringConverter::toString(mCamera->getDerivedOrientation().x));
+            mDetailsPanel->setParamValue(6, Ogre::StringConverter::toString(mCamera->getDerivedOrientation().y));
+            mDetailsPanel->setParamValue(7, Ogre::StringConverter::toString(mCamera->getDerivedOrientation().z));
+        }
+    }
+
+   
+}
 	if(mTerrainGroup->isDerivedDataUpdateInProgress())
 	{
 		mTrayMgr->moveWidgetToTray(mInfoLabel, OgreBites::TL_TOP, 0);
@@ -238,5 +286,5 @@ bool NimbusPrototype::frameRenderingQueued(const Ogre::FrameEvent& event)
 		}
 	}
 
-	return ret;
+	return true;
 }

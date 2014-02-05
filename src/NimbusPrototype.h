@@ -21,6 +21,7 @@ This source file is part of the
 #include <Terrain/OgreTerrainGroup.h>
 
 #include "BaseApplication.h"
+#include "RTSCamera.h"
 
 #define TERRAIN_SIZE 513
 #define WORLD_SIZE   12000.0f
@@ -30,6 +31,8 @@ class NimbusPrototype : public BaseApplication
 private:
 	Ogre::TerrainGlobalOptions* mTerrainGlobals;
 	Ogre::TerrainGroup* mTerrainGroup;
+	//trying to set up the cameraManager so it can be addressed at any point in the class
+	RTSCamera cameraManager;
 
 	OgreBites::Label* mInfoLabel;
 	
@@ -40,11 +43,12 @@ private:
 	void configureTerrainDefaults(Ogre::Light* light);
 
 public:
-    NimbusPrototype(void);
+	NimbusPrototype(void);
     virtual ~NimbusPrototype(void);
-
+	
 protected:
     virtual void createScene(void);
+	virtual void createCamera(void);
 	virtual void createFrameListener(void);
 	virtual void destroyScene(void);
 	virtual bool frameRenderingQueued(const Ogre::FrameEvent& event);
