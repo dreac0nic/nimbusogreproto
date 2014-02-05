@@ -82,7 +82,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseApplication.h" />
-    <ClInclude Include="src\CustCameraMan.h" />
     <ClInclude Include="src\NimbusPrototype.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

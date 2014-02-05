@@ -32,8 +32,5 @@
     <ClInclude Include="src\NimbusPrototype.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\CustCameraMan.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
