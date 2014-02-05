@@ -28,7 +28,7 @@ Controlling the camera in an RTS style.
  * [X] Over-hanging Camera
  * [X] User Input
     * [X] Arrow-key Panning
-    * [X] Border-Pushing [In testing]
+    * [X] Border-Pushing
  * [_] Camera Zoom
  * [_] Proper Height Processing
 
@@ -38,6 +38,8 @@ Controlling the camera in an RTS style.
  * [_] Wind Manipulation
 
 ## NOTES
+### Installation
+We will be using the 1.9 (11.29.2013) VS2012 SDK. This download can be found at [here](http://www.ogre3d.org/download/sdk)
 Currently does not include OGRE library files for the sake of repository integrity. May be included in a future version.
 
 To properly install OGRE, copy the contents of the OGRE folder into ./ProjectDir/ogre/
@@ -58,3 +60,9 @@ Project\ogre\boost\lib
 ###### TIP
 After moving OGRE to ./ProjectDir/ogre/, edit ogre/bin/Release/resources.cfg and ogre/bin/debug/resources_d.cfg to include glsl shaders if you plan on using OpenGL
 Additionally, add the OGRE_HOME execution directories to your PATH to run from Visual Studio
+=======
+### BaseApplication
+The BaseApplication is a simplistic framework class that provides the basic functions of a FrameListener as well as a series of other Ogre objects. We should not be modifying either BaseApplication.h BaseApplication.cpp, but rather overriding its functions using our inheriting class.
+
+### OgreBites
+OgreBites is a tutorial framework used to make introduction to the OGRE framework easy. We should be avoiding using anything used within this library and any references to it will be phased out with time.
