@@ -6,6 +6,7 @@ namespace Nimbus
 	WorldManager::WorldManager(void)
 	{
 		// Constructor
+		this->initialized = false;
 	}
 
 	// DESTRUCTOR   -----------------------------------
@@ -21,16 +22,21 @@ namespace Nimbus
 	 */
 	void WorldManager::init(void)
 	{
-
+		this->initialized = true;
 	}
 
 	/* update function runs an update cycle on each of its
 	 * delegates.
 	 */
-	void WorldManager::update(void)
+	bool WorldManager::update(void)
 	{
+		// Check to see if manager has been initialized.
+		if(!this->initialized) return false;
+
 		// Update Vectors
 		// Update Clouds
 		// Update Tiles
+
+		return true;
 	}
 }

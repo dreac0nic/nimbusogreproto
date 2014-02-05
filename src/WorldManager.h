@@ -13,6 +13,9 @@ namespace Nimbus
 	{
 		// MEMBER ATTRIBUTES
 	private:
+		// Tells whether or not the manager has been initialized
+		bool initialized;
+
 		// Represents the world's tile map with a vector of vectors of [chars]. (NOTE: Temp until tile class exists.)
 		std::vector< std::vector<char> > tiles;
 
@@ -29,7 +32,7 @@ namespace Nimbus
 
 		// MAINTENANCE FUNCTIONS
 		void init(void);
-		void update(void);
+		bool update(void);
 	};
 }
 
