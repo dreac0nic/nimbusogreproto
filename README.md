@@ -33,6 +33,7 @@ Controlling the camera in an RTS style.
  * [_] Proper Height Processing
 
 ##### Example Gameplay Mechanics
+ * [_] Simple Tile Mechanics [SpenSer]
  * [_] Vector Fields
  * [_] Cloud Objects
  * [_] Wind Manipulation
