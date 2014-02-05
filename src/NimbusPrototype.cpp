@@ -67,7 +67,11 @@ void NimbusPrototype::defineTerrain(long x, long y)
 	{
 		Ogre::Image img;
 
-		getTerrainImage((x%2) != 0, (y%2) != 0, img);
+		if(x == 0 && y == 0)
+			getTerrainImage((x%2) != 0, (y%2) != 0, img);
+		else
+			img.load("blank.png", "General");
+
 		mTerrainGroup->defineTerrain(x, y, &img);
 		mTerrainsImported = true;
 	}
@@ -122,7 +126,7 @@ void NimbusPrototype::configureTerrainDefaults(Ogre::Light* light)
 	mTerrainGlobals->setMaxPixelError(8);
 	
 	// Test composites.
-	mTerrainGlobals->setCompositeMapDistance(12000.0f*10);
+	mTerrainGlobals->setCompositeMapDistance(12000.0f);
 
 	// Set map globals for lighting.
 	mTerrainGlobals->setLightMapDirection(light->getDerivedDirection());
@@ -200,15 +204,15 @@ void NimbusPrototype::createScene(void)
 	// Create terrain ...
 	mTerrainGlobals = OGRE_NEW Ogre::TerrainGlobalOptions();
 
-	mTerrainGroup = OGRE_NEW Ogre::TerrainGroup(mSceneMgr, Ogre::Terrain::ALIGN_X_Z, 12000.0f, 600);
+	mTerrainGroup = OGRE_NEW Ogre::TerrainGroup(mSceneMgr, Ogre::Terrain::ALIGN_X_Z, 513, 12000.0f);
 	mTerrainGroup->setFilenameConvention(Ogre::String("NimbusTerrain"), Ogre::String("dat")); // TERRAIN LOADING
 	mTerrainGroup->setOrigin(Ogre::Vector3::ZERO);
 
 	this->configureTerrainDefaults(light);
 	
 	// Define our terrains
-	for(long x = 0; x <= 0; ++x)
-		for(long y = 0; y <= 0; ++y)
+	for(long x = 0; x <= 2; ++x)
+		for(long y = 0; y <= 2; ++y)
 			defineTerrain(x, y);
 
 	// Force loading of all terrains before starting application.
