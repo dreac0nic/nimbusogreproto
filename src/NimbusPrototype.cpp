@@ -278,8 +278,8 @@ bool NimbusPrototype::cameraAccel(const Ogre::FrameEvent &event)
 {
 	// build our acceleration vector based on keyboard input composite
 	Ogre::Vector3 accel = Ogre::Vector3::ZERO;
-	if (mGoingForward || mMouseGoingForward) accel += Ogre::Vector3(mCamera->getDirection().x, 0, mCamera->getDirection().z);
-	if (mGoingBack || mMouseGoingBack) accel -= Ogre::Vector3(mCamera->getDirection().x, 0, mCamera->getDirection().z);
+	if (mGoingForward || mMouseGoingForward) accel += Ogre::Vector3(0, 0, mCamera->getDirection().z);
+	if (mGoingBack || mMouseGoingBack) accel -= Ogre::Vector3(0, 0, mCamera->getDirection().z);
 	if (mGoingRight || mMouseGoingRight) accel += mCamera->getRight();
 	if (mGoingLeft || mMouseGoingLeft) accel -= mCamera->getRight();
 
@@ -373,8 +373,8 @@ bool NimbusPrototype::mouseMoved(const OIS::MouseEvent &arg)
 		if (mZoom < ZOOM_MIN) mZoom = ZOOM_MIN;
 
 		zoomCamPos = Ogre::Vector3(0, // X
-			yOffset + (yShift + zScale/ZOOM_MAX * mZoom)*(yShift + zScale/ZOOM_MAX * mZoom) * yScalingFactor, // Y
-			zOffset + (zScale / ZOOM_MAX) * mZoom /* Z */);
+			yOffset + (yShift + zScale/ZOOM_MAX * mZoomOld)*(yShift + zScale/ZOOM_MAX * mZoomOld) * yScalingFactor, // Y
+			zOffset + (zScale / ZOOM_MAX) * mZoomOld /* Z */);
 
 		focalPoint = mCamera->getPosition() - zoomCamPos + /* Correction factor */ Ogre::Vector3(0, 50, 0);
 
@@ -542,4 +542,7 @@ void NimbusPrototype::createCamera(void)
 		mCamera->setFarClipDistance(0);
 
 	mZoom = ZOOM_MAX;
+
+	// Set up better level of detail
+	mCamera->setLodBias(2.5F);
 }
