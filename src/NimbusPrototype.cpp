@@ -273,7 +273,7 @@ bool NimbusPrototype::frameRenderingQueued(const Ogre::FrameEvent& event)
 	return ret;
 }
 
-
+//-------------------------------------------------------------------------------------
 bool NimbusPrototype::cameraAccel(const Ogre::FrameEvent &event)
 {
 	// build our acceleration vector based on keyboard input composite
@@ -488,7 +488,7 @@ bool NimbusPrototype::baseKeyPressFunc(const OIS::KeyEvent &arg)
 void NimbusPrototype::createCamera(void)
 {
 	// Variables
-	cameraPosition = Ogre::Vector3(0, mTerrainGroup->getHeightAtWorldPosition(0, 0, 0) + 2500, 0);
+	cameraPosition = Ogre::Vector3(0, 2500, 0);
 	cameraLookAt = Ogre::Vector3(0, cameraPosition.y - 2450, cameraPosition.z + 1200);
 
 	// Create the camera
