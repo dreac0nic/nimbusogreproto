@@ -17,7 +17,7 @@ namespace Nimbus
 		bool initialized;
 
 		// Tile information
-		std::vector<int> tileCount;
+		std::vector<int> mTileCount;
 		std::vector<int> worldSize;
 
 		// Represents the world's tile map with a vector of vectors of [chars]. (NOTE: Temp until tile class exists.)

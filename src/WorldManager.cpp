@@ -4,7 +4,7 @@ namespace Nimbus
 {
 	// CONSTRUCTORS -----------------------------------
 	WorldManager::WorldManager(int tileCountX, int tileCountY, int worldWidth, int worldHeight):
-		tileCount(tileCountX, tileCountY), worldSize(worldWidth, worldHeight)
+		mTileCount(tileCountX, tileCountY), worldSize(worldWidth, worldHeight)
 	{
 		// Constructor
 		this->initialized = false;
@@ -23,6 +23,13 @@ namespace Nimbus
 	 */
 	void WorldManager::init(void)
 	{
+		// Generate a bunch of random tiles.
+		for(int x = 0; x < mTileCount[0]; ++x) {
+			for(int y = 0; y < mTileCount[1]; ++y) {
+
+			}
+		}
+
 		// After we're all done, mark as initialized
 		this->initialized = true;
 	}
