@@ -148,20 +148,6 @@ void NimbusPrototype::configureTerrainDefaults(Ogre::Light* light)
 //-------------------------------------------------------------------------------------
 void NimbusPrototype::createScene(void)
 {
-	// Variables
-	cameraLookAt = Ogre::Vector3(2150, 50, 1500);
-	cameraPosition = Ogre::Vector3(cameraLookAt.x, cameraLookAt.y + 2450, cameraLookAt.z - 1200);
-
-	// Setup camera, actually using a FAR CLIP PLANE this time.
-	mCamera->setPosition(cameraPosition);
-	mCamera->lookAt(cameraLookAt);
-	mCamera->setNearClipDistance(0.1f);
-	mCamera->setFarClipDistance(50000.0f);
-
-	// Setup infinite far clip plane, if supported.
-	if(mRoot->getRenderSystem()->getCapabilities()->hasCapability(Ogre::RSC_INFINITE_FAR_PLANE))
-		mCamera->setFarClipDistance(0);
-
 	// Setup some lighting.
 	Ogre::Vector3 lightdir(0.55f, -0.3f, 0.75f);
 	lightdir.normalise();
@@ -363,7 +349,18 @@ bool NimbusPrototype::mouseMoved(const OIS::MouseEvent &arg)
 	else
 		mGoingBack = false;
 	
+	if (arg.state.Z.rel)
+		if ((arg.state.Z.rel > 0 && mZoom < 4.0f) || arg.state.Z.rel < 0 && mZoom > 0.0f)
+		{
+			// Move the zoom!
+			mZoom += (arg.state.Z.rel / 120.0f);
 
+			// Sanitize data to be within bounds
+			if (mZoom > 4.0f) mZoom = 4.0f;
+			if (mZoom < 0.0f) mZoom = 0.0f;
+
+
+		}
 
 	return true;
 }
@@ -371,32 +368,29 @@ bool NimbusPrototype::mouseMoved(const OIS::MouseEvent &arg)
 //-------------------------------------------------------------------------------------
 bool NimbusPrototype::keyPressed( const OIS::KeyEvent &arg )
 {
-	switch (arg.key)
-	{
-	case OIS::KC_UP:
-	case OIS::KC_W:
-		mGoingForward = true;
-		break;
-
-	case OIS::KC_DOWN:
-	case OIS::KC_S:
-		mGoingBack = true;
-		break;
-
-	case OIS::KC_LEFT:
-	case OIS::KC_A:
-		mGoingLeft = true;
-		break;
-
-	case OIS::KC_RIGHT:
-	case OIS::KC_D:
-		mGoingRight = true;
-		break;
-	}
+	if (arg.key == OIS::KC_W || arg.key == OIS::KC_UP) mGoingForward = true;
+	else if (arg.key == OIS::KC_S || arg.key == OIS::KC_DOWN) mGoingBack = true;
+	else if (arg.key == OIS::KC_A || arg.key == OIS::KC_LEFT) mGoingLeft = true;
+	else if (arg.key == OIS::KC_D || arg.key == OIS::KC_RIGHT) mGoingRight = true;
+	else if (arg.key == OIS::KC_LSHIFT) mFastMove = true;
 
 	return baseKeyPressFunc(arg);
 }
 
+//-------------------------------------------------------------------------------------
+bool NimbusPrototype::keyReleased( const OIS::KeyEvent &arg )
+{
+	// Set up WASD and arrow key camera movement
+	if (arg.key == OIS::KC_W || arg.key == OIS::KC_UP) mGoingForward = false;
+	else if (arg.key == OIS::KC_S || arg.key == OIS::KC_DOWN) mGoingBack = false;
+	else if (arg.key == OIS::KC_A || arg.key == OIS::KC_LEFT) mGoingLeft = false;
+	else if (arg.key == OIS::KC_D || arg.key == OIS::KC_RIGHT) mGoingRight = false;
+	else if (arg.key == OIS::KC_LSHIFT) mFastMove = false;
+
+	return true;
+}
+
+//-------------------------------------------------------------------------------------
 bool NimbusPrototype::baseKeyPressFunc(const OIS::KeyEvent &arg)
 {
 	if (mTrayMgr->isDialogVisible()) return true;   // don't process any more keys if dialog is up
@@ -486,34 +480,6 @@ bool NimbusPrototype::baseKeyPressFunc(const OIS::KeyEvent &arg)
 	{
 		mShutDown = true;
 	}
-}
-
-//-------------------------------------------------------------------------------------
-bool NimbusPrototype::keyReleased( const OIS::KeyEvent &arg )
-{
-	// Set up WASD and arrow key camera movement
-	switch (arg.key)
-	{
-	case OIS::KC_UP:
-	case OIS::KC_W:
-		mGoingForward = false;
-		break;
-
-	case OIS::KC_DOWN:
-	case OIS::KC_S:
-		mGoingBack = false;
-		break;
-
-	case OIS::KC_LEFT:
-	case OIS::KC_A:
-		mGoingLeft = false;
-		break;
-
-	case OIS::KC_RIGHT:
-	case OIS::KC_D:
-		mGoingRight = false;
-		break;
-	}
 
 	return true;
 }
@@ -521,14 +487,24 @@ bool NimbusPrototype::keyReleased( const OIS::KeyEvent &arg )
 //-------------------------------------------------------------------------------------
 void NimbusPrototype::createCamera(void)
 {
+	// Variables
+	cameraPosition = Ogre::Vector3(0, mTerrainGroup->getHeightAtWorldPosition(0, 0, 0) + 2500, 0);
+	cameraLookAt = Ogre::Vector3(0, cameraPosition.y - 2450, cameraPosition.z + 1200);
+
 	// Create the camera
 	mCamera = mSceneMgr->createCamera("HoverCam");
 
-	// Position it at 500 in Z direction
-	mCamera->setPosition(Ogre::Vector3(0,0,80));
-	// Look back along -Z
-	mCamera->lookAt(Ogre::Vector3(0,0,-300));
-	mCamera->setNearClipDistance(5);
+	// Set up camera position at origin (0, 0)
+	mCamera->setPosition(cameraPosition);
+	mCamera->lookAt(cameraLookAt);
 
-	mZoom = 100;
+	// Set up clipping
+	mCamera->setNearClipDistance(0.1f);
+	mCamera->setFarClipDistance(50000.0f);
+	
+	// Set up infinite far clip plane, if supported.
+	if(mRoot->getRenderSystem()->getCapabilities()->hasCapability(Ogre::RSC_INFINITE_FAR_PLANE))
+		mCamera->setFarClipDistance(0);
+
+	mZoom = 4;
 }

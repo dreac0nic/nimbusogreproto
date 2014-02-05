@@ -24,7 +24,7 @@ This source file is part of the
 
 #define TERRAIN_SIZE 513
 #define WORLD_SIZE   12000.0f
-#define MOUSE_PUSH_DISTANCE 50
+#define MOUSE_PUSH_DISTANCE 80
 #define ZOOM_MAX 100
 #define ZOOM_MIN 0
 
@@ -64,6 +64,7 @@ protected:
 	bool baseKeyPressFunc(const OIS::KeyEvent &arg);
 
 	Ogre::Real mZoom;
+	Ogre::Real mZoomVelocity;
 
 	Ogre::Real mTopSpeed;
 	Ogre::Vector3 mVelocity;
