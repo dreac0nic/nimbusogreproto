@@ -350,16 +350,32 @@ bool NimbusPrototype::mouseMoved(const OIS::MouseEvent &arg)
 		mMouseGoingBack = false;
 	
 	if (arg.state.Z.rel)
-		if ((arg.state.Z.rel > 0 && mZoom < 4.0f) || arg.state.Z.rel < 0 && mZoom > 0.0f)
+		if ((arg.state.Z.rel > 0 && mZoom < ZOOM_MAX) || arg.state.Z.rel < 0 && mZoom > ZOOM_MIN)
 		{
+			// Grab the old zoom level for deltas
+			Ogre::Real mZoomOld = mZoom;
+			Ogre::Vector3 zoomVelocity = Ogre::Vector3::ZERO;
+			Ogre::Vector3 focalPoint;
+
 			// Move the zoom!
-			mZoom += (arg.state.Z.rel / 120.0f);
+			mZoom += (-arg.state.Z.rel / 120.0f);
 
 			// Sanitize data to be within bounds
-			if (mZoom > 4.0f) mZoom = 4.0f;
-			if (mZoom < 0.0f) mZoom = 0.0f;
+			if (mZoom > ZOOM_MAX) mZoom = ZOOM_MAX;
+			if (mZoom < ZOOM_MIN) mZoom = ZOOM_MIN;
 
+			focalPoint = mCamera->getPosition() - Ogre::Vector3(
+					0, // X
+					300 + ((-400 + (mZoom/ZOOM_MAX*1200))*(-400 + (mZoom/ZOOM_MAX*1200))/290), // Y
+					400 + (1200/ZOOM_MAX) * mZoom // Z
+				);
 
+			zoomVelocity.y = (-400 + (mZoom/ZOOM_MAX*1200))*(-400 + (mZoom/ZOOM_MAX*1200))
+								- (-400 + (mZoomOld/ZOOM_MAX*1200))*(-400 + (mZoomOld/ZOOM_MAX*1200));
+			zoomVelocity.z = ((1200/ZOOM_MAX) * mZoom) - ((1200/ZOOM_MAX) * mZoomOld);
+
+			mCamera->move(zoomVelocity);
+			mCamera->lookAt(focalPoint + zoomVelocity);
 		}
 
 	return true;
@@ -490,6 +506,14 @@ void NimbusPrototype::createCamera(void)
 	// Variables
 	cameraPosition = Ogre::Vector3(0, 2500, 0);
 	cameraLookAt = Ogre::Vector3(0, cameraPosition.y - 2450, cameraPosition.z + 1200);
+	mGoingForward = false;
+	mGoingBack = false;
+	mGoingLeft = false;
+	mGoingRight = false;
+	mMouseGoingForward = false;
+	mMouseGoingBack = false;
+	mMouseGoingLeft = false;
+	mMouseGoingRight = false;
 
 	// Create the camera
 	mCamera = mSceneMgr->createCamera("HoverCam");
@@ -506,5 +530,5 @@ void NimbusPrototype::createCamera(void)
 	if(mRoot->getRenderSystem()->getCapabilities()->hasCapability(Ogre::RSC_INFINITE_FAR_PLANE))
 		mCamera->setFarClipDistance(0);
 
-	mZoom = 4;
+	mZoom = ZOOM_MAX;
 }
