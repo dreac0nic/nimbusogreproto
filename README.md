@@ -25,10 +25,10 @@ Generating, texturing and lighting some basic terrain along with the rest of the
 
 ##### Camera Control
 Controlling the camera in an RTS style.
- * [_] Over-hanging Camera
- * [_] User Input
-    * [_] Arrow-key Panning
-    * [_] Border-Pushing
+ * [X] Over-hanging Camera
+ * [X] User Input
+    * [X] Arrow-key Panning
+    * [X] Border-Pushing
  * [_] Camera Zoom
  * [_] Proper Height Processing
 
