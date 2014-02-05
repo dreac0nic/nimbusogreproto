@@ -79,10 +79,12 @@
     <ClCompile Include="src\BaseApplication.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\NimbusPrototype.cpp" />
+    <ClCompile Include="src\WorldManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseApplication.h" />
     <ClInclude Include="src\NimbusPrototype.h" />
+    <ClInclude Include="src\WorldManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
