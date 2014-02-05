@@ -349,7 +349,7 @@ bool NimbusPrototype::mouseMoved(const OIS::MouseEvent &arg)
 	else
 		mMouseGoingBack = false;
 	
-	if ((arg.state.Z.rel > 0 && mZoom < ZOOM_MAX) || arg.state.Z.rel < 0 && mZoom > ZOOM_MIN)
+	if ((arg.state.Z.rel > 0 && mZoom > ZOOM_MIN) || arg.state.Z.rel < 0 && mZoom < ZOOM_MAX)
 	{
 		// Grab the old zoom level for deltas
 		Ogre::Real mZoomOld = mZoom;
