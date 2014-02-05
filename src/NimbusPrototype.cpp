@@ -353,11 +353,12 @@ bool NimbusPrototype::mouseMoved(const OIS::MouseEvent &arg)
 	{
 		// Grab the old zoom level for deltas
 		Ogre::Real mZoomOld = mZoom;
-		Ogre::Vector3 zoomVelocity = Ogre::Vector3::ZERO;
+		Ogre::Vector3 zoomDisplacement = Ogre::Vector3::ZERO;
 		Ogre::Vector3 focalPoint;
+		Ogre::Vector3 zoomCamPos;
 
 		// Move the zoom!
-		mZoom += (arg.state.Z.rel / 120.0f / 7.0f);
+		mZoom += (arg.state.Z.rel / 120.0f / 3.0f);
 
 		std::cout << "Zoom Rel: " << (arg.state.Z.rel / 120.0f) << "\nZoom: " << mZoom << std::endl;
 
@@ -365,18 +366,19 @@ bool NimbusPrototype::mouseMoved(const OIS::MouseEvent &arg)
 		if (mZoom > ZOOM_MAX) mZoom = ZOOM_MAX;
 		if (mZoom < ZOOM_MIN) mZoom = ZOOM_MIN;
 
-		focalPoint = mCamera->getPosition() - Ogre::Vector3(0, // X
-			300 + (800 / ZOOM_MAX * mZoom)*(800 / ZOOM_MAX * mZoom)/290.0f, // Y
-			400 + (800 / ZOOM_MAX) * mZoom /* Z */) + Ogre::Vector3(0, // X
-			300 + 800*800/290.0f, // Y
-			400 + 800 // Z
-			) - Ogre::Vector3(0, 2450, 1200);
+		zoomCamPos = Ogre::Vector3(0, // X
+			300 + (64000 * mZoom*mZoom)/(29.0f * ZOOM_MAX*ZOOM_MAX), // Y
+			400 + (800 / ZOOM_MAX) * mZoom /* Z */);
 
-		zoomVelocity.y = (800 / ZOOM_MAX * mZoom)*(800 / ZOOM_MAX * mZoom)/290.0f
-			- (800 / ZOOM_MAX * mZoomOld)*(800 / ZOOM_MAX * mZoomOld)/290.0f;
-		zoomVelocity.z = ((800/ZOOM_MAX) * mZoom) - ((800/ZOOM_MAX) * mZoomOld);
+		focalPoint = mCamera->getPosition() - zoomCamPos + /* Correction factor */ Ogre::Vector3(0, 50, 0);
 
-		mCamera->move(zoomVelocity);
+		std::cout << focalPoint;
+
+		zoomDisplacement.y = (64000 * mZoom*mZoom)/(29.0f * ZOOM_MAX*ZOOM_MAX)
+			- (64000 * mZoomOld*mZoomOld)/(29.0f * ZOOM_MAX*ZOOM_MAX);
+		zoomDisplacement.z = ((800/ZOOM_MAX) * mZoom) - ((800/ZOOM_MAX) * mZoomOld);
+
+		mCamera->move(zoomDisplacement);
 		mCamera->lookAt(focalPoint);
 	}
 
