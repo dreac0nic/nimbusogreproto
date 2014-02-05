@@ -349,34 +349,35 @@ bool NimbusPrototype::mouseMoved(const OIS::MouseEvent &arg)
 	else
 		mMouseGoingBack = false;
 	
-	if (arg.state.Z.rel)
-		if ((arg.state.Z.rel > 0 && mZoom < ZOOM_MAX) || arg.state.Z.rel < 0 && mZoom > ZOOM_MIN)
-		{
-			// Grab the old zoom level for deltas
-			Ogre::Real mZoomOld = mZoom;
-			Ogre::Vector3 zoomVelocity = Ogre::Vector3::ZERO;
-			Ogre::Vector3 focalPoint;
+	if ((arg.state.Z.rel > 0 && mZoom < ZOOM_MAX) || arg.state.Z.rel < 0 && mZoom > ZOOM_MIN)
+	{
+		// Grab the old zoom level for deltas
+		Ogre::Real mZoomOld = mZoom;
+		Ogre::Vector3 zoomVelocity = Ogre::Vector3::ZERO;
+		Ogre::Vector3 focalPoint;
 
-			// Move the zoom!
-			mZoom += (-arg.state.Z.rel / 120.0f);
+		// Move the zoom!
+		mZoom = mZoom - (arg.state.Z.rel / 120.0f);
 
-			// Sanitize data to be within bounds
-			if (mZoom > ZOOM_MAX) mZoom = ZOOM_MAX;
-			if (mZoom < ZOOM_MIN) mZoom = ZOOM_MIN;
+		printf("Zoom Rel: %d\nZoom: fd\n", (arg.state.Z.rel / 120.0f), mZoom);
 
-			focalPoint = mCamera->getPosition() - Ogre::Vector3(
-					0, // X
-					300 + ((-400 + (mZoom/ZOOM_MAX*1200))*(-400 + (mZoom/ZOOM_MAX*1200))/290), // Y
-					400 + (1200/ZOOM_MAX) * mZoom // Z
-				);
+		// Sanitize data to be within bounds
+		if (mZoom > ZOOM_MAX) mZoom = ZOOM_MAX;
+		if (mZoom < ZOOM_MIN) mZoom = ZOOM_MIN;
 
-			zoomVelocity.y = (-400 + (mZoom/ZOOM_MAX*1200))*(-400 + (mZoom/ZOOM_MAX*1200))
-								- (-400 + (mZoomOld/ZOOM_MAX*1200))*(-400 + (mZoomOld/ZOOM_MAX*1200));
-			zoomVelocity.z = ((1200/ZOOM_MAX) * mZoom) - ((1200/ZOOM_MAX) * mZoomOld);
+		focalPoint = mCamera->getPosition() - Ogre::Vector3(
+			0, // X
+			300 + ((-400 + (mZoom/ZOOM_MAX*1200))*(-400 + (mZoom/ZOOM_MAX*1200))/290), // Y
+			400 + (1200/ZOOM_MAX) * mZoom // Z
+			);
 
-			mCamera->move(zoomVelocity);
-			mCamera->lookAt(focalPoint + zoomVelocity);
-		}
+		zoomVelocity.y = (-400 + (mZoom/ZOOM_MAX*1200))*(-400 + (mZoom/ZOOM_MAX*1200))
+			- (-400 + (mZoomOld/ZOOM_MAX*1200))*(-400 + (mZoomOld/ZOOM_MAX*1200));
+		zoomVelocity.z = ((1200/ZOOM_MAX) * mZoom) - ((1200/ZOOM_MAX) * mZoomOld);
+
+		mCamera->move(zoomVelocity);
+		mCamera->lookAt(focalPoint + zoomVelocity);
+	}
 
 	return true;
 }
