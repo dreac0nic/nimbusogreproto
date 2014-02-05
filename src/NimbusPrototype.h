@@ -72,6 +72,10 @@ protected:
 	bool mGoingBack;
 	bool mGoingLeft;
 	bool mGoingRight;
+	bool mMouseGoingForward;
+	bool mMouseGoingBack;
+	bool mMouseGoingLeft;
+	bool mMouseGoingRight;
 	bool mFastMove;
 };
 

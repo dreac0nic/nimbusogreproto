@@ -278,10 +278,10 @@ bool NimbusPrototype::cameraAccel(const Ogre::FrameEvent &event)
 {
 	// build our acceleration vector based on keyboard input composite
 	Ogre::Vector3 accel = Ogre::Vector3::ZERO;
-	if (mGoingForward) accel += Ogre::Vector3(mCamera->getDirection().x, 0, mCamera->getDirection().z);
-	if (mGoingBack) accel -= Ogre::Vector3(mCamera->getDirection().x, 0, mCamera->getDirection().z);
-	if (mGoingRight) accel += mCamera->getRight();
-	if (mGoingLeft) accel -= mCamera->getRight();
+	if (mGoingForward || mMouseGoingForward) accel += Ogre::Vector3(mCamera->getDirection().x, 0, mCamera->getDirection().z);
+	if (mGoingBack || mMouseGoingBack) accel -= Ogre::Vector3(mCamera->getDirection().x, 0, mCamera->getDirection().z);
+	if (mGoingRight || mMouseGoingRight) accel += mCamera->getRight();
+	if (mGoingLeft || mMouseGoingLeft) accel -= mCamera->getRight();
 
 	// if accelerating, try to reach top speed in a certain time
 	Ogre::Real topSpeed = mFastMove ? mTopSpeed * 20 : mTopSpeed;
@@ -330,24 +330,24 @@ bool NimbusPrototype::mouseMoved(const OIS::MouseEvent &arg)
 	int height = mRoot->getAutoCreatedWindow()->getHeight();
 	
 	if (arg.state.X.abs < MOUSE_PUSH_DISTANCE)
-		mGoingLeft = true;
+		mMouseGoingLeft = true;
 	else
-		mGoingLeft = false;
+		mMouseGoingLeft = false;
 	
 	if (arg.state.X.abs > width - MOUSE_PUSH_DISTANCE)
-		mGoingRight = true;
+		mMouseGoingRight = true;
 	else
-		mGoingRight = false;
+		mMouseGoingRight = false;
 
 	if (arg.state.Y.abs < MOUSE_PUSH_DISTANCE)
-		mGoingForward = true;
+		mMouseGoingForward = true;
 	else
-		mGoingForward = false;
+		mMouseGoingForward = false;
 
 	if (arg.state.Y.abs > height - MOUSE_PUSH_DISTANCE)
-		mGoingBack = true;
+		mMouseGoingBack = true;
 	else
-		mGoingBack = false;
+		mMouseGoingBack = false;
 	
 	if (arg.state.Z.rel)
 		if ((arg.state.Z.rel > 0 && mZoom < 4.0f) || arg.state.Z.rel < 0 && mZoom > 0.0f)
