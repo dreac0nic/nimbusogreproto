@@ -28,6 +28,7 @@ namespace Nimbus
 		~WorldManager();
 
 		// MAINTENANCE FUNCTIONS
+		void init(void);
 		void update(void);
 	};
 }
