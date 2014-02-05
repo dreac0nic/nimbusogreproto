@@ -3,7 +3,8 @@
 namespace Nimbus
 {
 	// CONSTRUCTORS -----------------------------------
-	WorldManager::WorldManager(void)
+	WorldManager::WorldManager(int tileCountX, int tileCountY, int worldWidth, int worldHeight):
+		tileCount(tileCountX, tileCountY), worldSize(worldWidth, worldHeight)
 	{
 		// Constructor
 		this->initialized = false;

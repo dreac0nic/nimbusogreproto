@@ -16,6 +16,10 @@ namespace Nimbus
 		// Tells whether or not the manager has been initialized
 		bool initialized;
 
+		// Tile information
+		std::vector<int> tileCount;
+		std::vector<int> worldSize;
+
 		// Represents the world's tile map with a vector of vectors of [chars]. (NOTE: Temp until tile class exists.)
 		std::vector< std::vector<char> > tiles;
 
@@ -25,7 +29,7 @@ namespace Nimbus
 		// MEMBER METHODS
 	public:
 		// CONSTRUCTORS --
-		WorldManager();
+		WorldManager(int tileCountX, int tileCountY, int worldWidth, int worldHeight);
 
 		// DESTRUCTOR
 		~WorldManager();
