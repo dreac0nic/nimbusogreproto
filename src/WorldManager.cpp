@@ -23,10 +23,35 @@ namespace Nimbus
 	 */
 	void WorldManager::init(void)
 	{
+		// Initialize datastructures ...
+		//   Note: See mVectors description for explanation of vector count.
+		mTiles.resize(mTileCount[0]);
+		mVectors.resize(mTileCount[0]);
+
+		for(int i = 0; i < mTileCount[0]; ++i) {
+			mTiles[i].resize(mTileCount[1]);
+			mVectors[i].resize(mTileCount[1]);
+
+			for(j = 0; j < mTileCount[1]; ++j)
+				mVectors[i][j] = Ogre::Vector2::ZERO;
+		}
+
 		// Generate a bunch of random tiles.
 		for(int x = 0; x < mTileCount[0]; ++x) {
 			for(int y = 0; y < mTileCount[1]; ++y) {
+				mTiles[x][y] = 'a' + rand()%26;
+			}
+		}
 
+		// Generate a bunch of random vectors and normalize the result.
+		//   Range: -10.0 to 10.0 with 1 digit to right of decimal.
+		//   Todo: In the future, procedurally create a series of vectors.
+		//   Note: See mVectors description for explanation of vector count.
+		for(int x = 0; x < mTileCount[0]; ++x) {
+			for(int y = 0; y < mTileCount[1]; ++y) {
+				mVectors[x][y] = Ogre::Vector2((rand()%200 - 100)/10.0f, (rand()%100 - 100)/10.0f);
+
+				mVectors[x][y].normalise();
 			}
 		}
 
