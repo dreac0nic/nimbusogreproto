@@ -22,6 +22,8 @@ This source file is part of the
 
 #include "BaseApplication.h"
 
+#include "WorldManager.h"
+
 #define TERRAIN_SIZE 513
 #define WORLD_SIZE   12000.0f
 
@@ -38,6 +40,9 @@ private:
 	void defineTerrain(long x, long y); // Thank goodness for no type redefs.
 	void initBlendMaps(Ogre::Terrain* terrain);
 	void configureTerrainDefaults(Ogre::Light* light);
+
+	// World management.
+	Nimbus::WorldManager mWorldMan;
 
 public:
     NimbusPrototype(void);
