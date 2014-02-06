@@ -276,6 +276,13 @@ bool NimbusPrototype::frameRenderingQueued(const Ogre::FrameEvent& event)
 //-------------------------------------------------------------------------------------
 bool NimbusPrototype::cameraAccel(const Ogre::FrameEvent &event)
 {
+	const int yShift = 100;
+	const int yOffset = 270;
+	const int zOffset = 400;
+	const int zScale = 800;
+	const double yScalingFactor = 1/360.0f;
+	Ogre::Vector3 focalPoint;
+
 	// build our acceleration vector based on keyboard input composite
 	Ogre::Vector3 accel = Ogre::Vector3::ZERO;
 	if (mGoingForward || mMouseGoingForward) accel += mCamera->getDirection().UNIT_Z;
@@ -293,6 +300,12 @@ bool NimbusPrototype::cameraAccel(const Ogre::FrameEvent &event)
 	// if not accelerating, try to stop in a certain time
 	else mVelocity -= mVelocity * event.timeSinceLastFrame * 10;
 
+	focalPoint = mCamera->getPosition()
+		- Ogre::Vector3(0, 
+		yOffset + (yShift + zScale/ZOOM_MAX * mZoom)*(yShift + zScale/ZOOM_MAX * mZoom) * yScalingFactor,
+			- (zOffset + (zScale / ZOOM_MAX) * mZoom))
+		+ Ogre::Vector3(0, 50, 0);
+
 	Ogre::Real tooSmall = std::numeric_limits<Ogre::Real>::epsilon();
 
 	// keep camera velocity below top speed and above epsilon
@@ -304,7 +317,13 @@ bool NimbusPrototype::cameraAccel(const Ogre::FrameEvent &event)
 	else if (mVelocity.squaredLength() < tooSmall * tooSmall)
 		mVelocity = Ogre::Vector3::ZERO;
 
-	if (mVelocity != Ogre::Vector3::ZERO) mCamera->move(mVelocity * event.timeSinceLastFrame);
+	if (mVelocity != Ogre::Vector3::ZERO)
+	{
+		Ogre::Vector3 heightDisplacement = Ogre::Vector3(0, mTerrainGroup->getHeightAtWorldPosition(focalPoint) - focalPoint.y, 0);
+		if (abs(heightDisplacement.y) >= 90.0f) mVelocity += heightDisplacement;
+
+		mCamera->move(mVelocity * event.timeSinceLastFrame);
+	}
 
 	return true;
 }
@@ -356,6 +375,7 @@ bool NimbusPrototype::mouseMoved(const OIS::MouseEvent &arg)
 		Ogre::Vector3 zoomDisplacement = Ogre::Vector3::ZERO;
 		Ogre::Vector3 focalPoint;
 		Ogre::Vector3 zoomCamPos;
+		Ogre::Vector3 heightDisplacement = Ogre::Vector3::ZERO;
 		
 		const int yShift = 100;
 		const int yOffset = 270;
@@ -364,7 +384,7 @@ bool NimbusPrototype::mouseMoved(const OIS::MouseEvent &arg)
 		const double yScalingFactor = 1/360.0f;
 
 		// Move the zoom!
-		mZoom -= (arg.state.Z.rel / 120.0f / 3.0f);
+		mZoom -= (arg.state.Z.rel / 120.0f / 2.4f);
 
 		std::cout << "Zoom Rel: " << (arg.state.Z.rel / 120.0f) << "\nZoom: " << mZoom << std::endl;
 
@@ -514,8 +534,8 @@ bool NimbusPrototype::baseKeyPressFunc(const OIS::KeyEvent &arg)
 void NimbusPrototype::createCamera(void)
 {
 	// Variables
-	cameraPosition = Ogre::Vector3(0, 2500, 0);
-	cameraLookAt = Ogre::Vector3(0, cameraPosition.y - 2450, cameraPosition.z + 1200);
+	Ogre::Vector3 cameraPosition = Ogre::Vector3(0, 2500, 0);
+	Ogre::Vector3 cameraLookAt = Ogre::Vector3(0, cameraPosition.y - 2450, cameraPosition.z + 1200);
 	mGoingForward = false;
 	mGoingBack = false;
 	mGoingLeft = false;

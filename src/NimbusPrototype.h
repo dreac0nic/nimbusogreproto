@@ -25,8 +25,8 @@ This source file is part of the
 #define TERRAIN_SIZE 513
 #define WORLD_SIZE   12000.0f
 #define MOUSE_PUSH_DISTANCE 80
-#define ZOOM_MAX 7.0f
-#define ZOOM_MIN 0.0f
+#define ZOOM_MAX 12.0f
+#define ZOOM_MIN 1.2f
 
 class NimbusPrototype : public BaseApplication
 {
@@ -41,9 +41,6 @@ private:
 	void defineTerrain(long x, long y); // Thank goodness for no type redefs.
 	void initBlendMaps(Ogre::Terrain* terrain);
 	void configureTerrainDefaults(Ogre::Light* light);
-
-	Ogre::Vector3 cameraLookAt;
-	Ogre::Vector3 cameraPosition;
 
 public:
     NimbusPrototype(void);
