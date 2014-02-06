@@ -10,7 +10,7 @@ namespace Nimbus
 		this->initialized = false;
 	}
 
-	// DESTRUCTOR   -----------------------------------
+	// DESTRUCTOR   ----------------------------------
 	WorldManager::~WorldManager(void)
 	{
 		// Destructor
