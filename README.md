@@ -14,25 +14,26 @@ Will focus on implementation of:
 ##### Terrain Generation
 Generating, texturing and lighting some basic terrain along with the rest of the world.
  * [X] Proper Scene Manager
- * [_] Refined Heightmap/dat Generation [SpenSer]
- * [_] Lighting/shadow maps
-    * [_] Possible bump-mapping
+ * [X] Refined Heightmap/dat Generation
+ * [X] Lighting/shadow maps
+    * [X] Possible bump-mapping
  * [_] Environment Initialization
     * [_] Render to Geometry
 	* [_] Texture Layering
- * [_] Water
-    * [_] Land -> Water Smoothing
+ * [X] Water
+    * [X] Land -> Water Smoothing
 
 ##### Camera Control
 Controlling the camera in an RTS style.
- * [_] Over-hanging Camera
- * [_] User Input
-    * [_] Arrow-key Panning
-    * [_] Border-Pushing
+ * [X] Over-hanging Camera
+ * [X] User Input
+    * [X] Arrow-key Panning
+    * [X] Border-Pushing
  * [_] Camera Zoom
  * [_] Proper Height Processing
 
 ##### Example Gameplay Mechanics
+ * [_] Simple Tile Mechanics [SpenSer]
  * [_] Vector Fields
  * [_] Cloud Objects
  * [_] Wind Manipulation
