@@ -37,6 +37,7 @@ namespace Nimbus
 		}
 
 		// Generate a bunch of random tiles.
+		//   Note: "TILES"
 		for(int x = 0; x < mTileCount[0]; ++x) {
 			for(int y = 0; y < mTileCount[1]; ++y) {
 				mTiles[x][y] = 'a' + rand()%26;
@@ -68,8 +69,22 @@ namespace Nimbus
 		if(!this->initialized) return false;
 
 		// Update Vectors
+		//   Note: Does nothing, but simulates iteration.
+		for(int x = 0; x < mTileCount[0]; ++x) {
+			for(int y = 0; y < mTileCount[1]; ++y) {
+				mVectors[x][y].normalise();
+			}
+		}
+
 		// Update Clouds
+		//   NO CLOUDS
+
 		// Update Tiles
+		for(int x = 0; x < mTileCount[0]; ++x) {
+			for(int y = 0; y < mTileCount[1]; ++y) {
+				mTiles[x][y] = 'a' + rand()%26;
+			}
+		}
 
 		return true;
 	}
