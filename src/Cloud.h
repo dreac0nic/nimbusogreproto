@@ -26,7 +26,7 @@ namespace Nimbus
 		Cloud(int width, int height);
 
 		// DESTRUCTOR
-		~Cloud();
+		~Cloud(void);
 	};
 }
 

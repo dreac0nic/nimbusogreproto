@@ -34,7 +34,7 @@ namespace Nimbus
 		WorldManager(int tileCountX, int tileCountY, int worldWidth, int worldHeight);
 
 		// DESTRUCTOR
-		~WorldManager();
+		~WorldManager(void);
 
 		// MAINTENANCE FUNCTIONS
 		void init(void);
