@@ -16,11 +16,11 @@
 *.opensdf
 *.sdf
 *.suo
-*.user
 
 # Build directories, including intermediates
 build/*
-Debug/*
 
 # Keep OGRE directories hidden for now ...
 ogre/*
+
+# THIS IS A COMMENT
