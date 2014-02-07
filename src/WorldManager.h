@@ -7,6 +7,8 @@
 
 #include <OgreRoot.h>
 
+#include "Tile.h"
+
 namespace Nimbus
 {
 	using namespace Ogre;
@@ -23,7 +25,7 @@ namespace Nimbus
 		std::vector<int> worldSize;
 
 		// Represents the world's tile map with a vector of vectors of [chars]. (NOTE: Temp until tile class exists.)
-		std::vector< std::vector<char> > mTiles;
+		std::vector< std::vector<Nimbus::Tile*> > mTiles;
 
 		// Represents our map's vector field with a vector of vectores of ogre vectors. Number of vectors currently dependent on tiles (1:1), but could be changed in the future.
 		std::vector< std::vector<Ogre::Vector2> > mVectors;

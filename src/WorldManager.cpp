@@ -13,7 +13,12 @@ namespace Nimbus
 	// DESTRUCTOR   ----------------------------------
 	WorldManager::~WorldManager(void)
 	{
-		// Destructor
+		// Cleanup all of the tiles.
+		for(int x = 0; x < mTileCount[0]; ++x) {
+			for(int y = 0; y < mTileCount[1]; ++y) {
+				delete mTiles[x][y];
+			}
+		}
 	}
 
 	// MAINTENANCE FUNCTIONS --------------------------
@@ -40,7 +45,7 @@ namespace Nimbus
 		//   Note: "TILES"
 		for(int x = 0; x < mTileCount[0]; ++x) {
 			for(int y = 0; y < mTileCount[1]; ++y) {
-				mTiles[x][y] = 'a' + rand()%26;
+				mTiles[x][y] = new Tile();
 			}
 		}
 
@@ -82,7 +87,7 @@ namespace Nimbus
 		// Update Tiles
 		for(int x = 0; x < mTileCount[0]; ++x) {
 			for(int y = 0; y < mTileCount[1]; ++y) {
-				mTiles[x][y] = 'a' + rand()%26;
+				mTiles[x][y] = new Tile();
 			}
 		}
 
