@@ -34,6 +34,17 @@ void NimbusPrototype::destroyScene(void)
 }
 
 //-------------------------------------------------------------------------------------
+void NimbusPrototype::chooseSceneManager(void)
+{
+	// Create the scene manager.
+	mSceneMgr = mRoot->createSceneManager(Ogre::ST_EXTERIOR_REAL_FAR);
+
+	// Create the OverlaySystem for use in the HUD later.
+	mOverlaySystem = new Ogre::OverlaySystem();
+	mSceneMgr->addRenderQueueListener(mOverlaySystem);
+}
+
+//-------------------------------------------------------------------------------------
 void getTerrainImage(bool flipX, bool flipY, Ogre::Image& img)
 {
 	img.load("terrain.png", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
@@ -56,7 +67,11 @@ void NimbusPrototype::defineTerrain(long x, long y)
 	{
 		Ogre::Image img;
 
-		getTerrainImage((x%2) != 0, (y%2) != 0, img);
+		if(x == 0 && y == 0)
+			getTerrainImage((x%2) != 0, (y%2) != 0, img);
+		else
+			img.load("blank.png", "General");
+
 		mTerrainGroup->defineTerrain(x, y, &img);
 		mTerrainsImported = true;
 	}
@@ -111,7 +126,7 @@ void NimbusPrototype::configureTerrainDefaults(Ogre::Light* light)
 	mTerrainGlobals->setMaxPixelError(8);
 	
 	// Test composites.
-	mTerrainGlobals->setCompositeMapDistance(3000);
+	mTerrainGlobals->setCompositeMapDistance(12000.0f);
 
 	// Set map globals for lighting.
 	mTerrainGlobals->setLightMapDirection(light->getDerivedDirection());
@@ -120,11 +135,11 @@ void NimbusPrototype::configureTerrainDefaults(Ogre::Light* light)
 
 	// Configure the settings for importing.
 	Ogre::Terrain::ImportData& importConfig = mTerrainGroup->getDefaultImportSettings();
-	importConfig.terrainSize = TERRAIN_SIZE;
-	importConfig.worldSize = WORLD_SIZE;
+	importConfig.terrainSize = 512 + 1;
+	importConfig.worldSize = 12000.0f;
 	importConfig.inputScale = 600;
-	importConfig.minBatchSize = 33;
-	importConfig.maxBatchSize = 65;
+	importConfig.minBatchSize = 32 + 1;
+	importConfig.maxBatchSize = 64 + 1;
 
 	// Load some textures!
 	importConfig.layerList.resize(3);
@@ -159,27 +174,45 @@ void NimbusPrototype::createScene(void)
 	Ogre::Vector3 lightdir(0.55f, -0.3f, 0.75f);
 	lightdir.normalise();
 
-	Ogre::Light* light = mSceneMgr->createLight("tstLight");
+	Ogre::Light* light = mSceneMgr->createLight("sun");
 	light->setType(Ogre::Light::LT_DIRECTIONAL);
 	light->setDirection(lightdir);
 	light->setDiffuseColour(Ogre::ColourValue::White);
 	light->setSpecularColour(Ogre::ColourValue(0.4f, 0.4f, 0.4f));
 
-	// -- Blarge, ambient light ...
-	mSceneMgr->setAmbientLight(Ogre::ColourValue(0.2f, 0.2f, 0.2f));
+	// -- Add a tiny bit of ambient light.
+	mSceneMgr->setAmbientLight(Ogre::ColourValue(0.1f, 0.1f, 0.1f));
+
+	// Lets make some water!
+	Ogre::Entity* waterEntity;
+	Ogre::Plane waterPlane;
+
+	// Create the plane.
+	waterPlane.normal = Ogre::Vector3::UNIT_Y;
+	waterPlane.d = -1.5;
+
+	Ogre::MeshManager::getSingleton().createPlane("waterPlane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, waterPlane, 12000.0f*3, 12000.0f*3, 20, 20, true, 1, 10, 10, Ogre::Vector3::UNIT_Z);
+
+	// Create the water entity.
+	waterEntity = mSceneMgr->createEntity("water", "waterPlane");
+	waterEntity->setMaterialName("Examples/TextureEffect4");
+	
+	Ogre::SceneNode *waterNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("waterNode");
+	waterNode->attachObject(waterEntity);
+	waterNode->translate(0.0f, 100.0f, 0.0f);
 
 	// Create terrain ...
 	mTerrainGlobals = OGRE_NEW Ogre::TerrainGlobalOptions();
 
-	mTerrainGroup = OGRE_NEW Ogre::TerrainGroup(mSceneMgr, Ogre::Terrain::ALIGN_X_Z, TERRAIN_SIZE, WORLD_SIZE);
-	mTerrainGroup->setFilenameConvention(Ogre::String("BasicTutorial3Terrain"), Ogre::String("dat")); // TERRAIN LOADING
+	mTerrainGroup = OGRE_NEW Ogre::TerrainGroup(mSceneMgr, Ogre::Terrain::ALIGN_X_Z, 512 + 1, 12000.0f);
+	mTerrainGroup->setFilenameConvention(Ogre::String("NimbusTerrain"), Ogre::String("dat")); // TERRAIN LOADING
 	mTerrainGroup->setOrigin(Ogre::Vector3::ZERO);
 
 	this->configureTerrainDefaults(light);
 	
-	// Define our terrains...?
-	for(long x = 0; x <= 0; ++x)
-		for(long y = 0; y <= 0; ++y)
+	// Define our terrains
+	for(long x = -1; x <= 1; ++x)
+		for(long y = -1; y <= 1; ++y)
 			defineTerrain(x, y);
 
 	// Force loading of all terrains before starting application.
