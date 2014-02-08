@@ -201,7 +201,7 @@ void NimbusPrototype::createScene(void)
 	mTerrainGroup->setFilenameConvention(Ogre::String("BasicTutorial3Terrain"), Ogre::String("dat")); // TERRAIN LOADING
 	mTerrainGroup->setOrigin(Ogre::Vector3::ZERO);
 
-	this->configureTerrainDefaults(light);
+	this->configureTerrainDefaults(sunLight);
 	
 	// Define our terrains
 	for(long x = -1; x <= 1; ++x)
