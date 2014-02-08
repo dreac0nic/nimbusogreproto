@@ -14,7 +14,7 @@ namespace Nimbus
 	private:
 		// CLASS ATTRIBUTES
 		// Represents the number of current active clouds, could implement a counting class.
-		static int count;
+		static unsigned long long int count;
 
 		// MEMBER ATTRIBUTES
 		// Holds the width and height of the cloud's dimensions.
