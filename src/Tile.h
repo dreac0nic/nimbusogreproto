@@ -9,8 +9,13 @@ namespace Nimbus
 
 	class Tile
 	{
-		// MEMBER ATTRIBUTES
+		
+		
 	private:
+		// CLASS ATTRIBUTES
+		static unsigned long long int count;
+
+		// MEMBER ATTRIBUTES
 
 		// Represents different aspects of the tile environment.
 		//   NOTE: DETAIL EACH LATER.
