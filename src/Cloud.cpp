@@ -5,7 +5,7 @@ namespace Nimbus
 	// INTIALIZE CLASS VARIABLES
 	//   Not necessary under most C++ standards, and especially C++11,
 	//   but kept for consistancy of initialization.
-	int Cloud::count = 0;
+	unsigned long long int Cloud::count = 0;
 
 	// CONSTRUCTORS -----------------------------------
 	Cloud::Cloud(int width, int height):
