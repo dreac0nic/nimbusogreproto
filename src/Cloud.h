@@ -25,8 +25,17 @@ namespace Nimbus
 		// CONSTRUCTIONS --
 		Cloud(int width, int height);
 
-		// DESTRUCTOR
+		// DESTRUCTOR --
 		~Cloud(void);
+
+		// ACCESSOR METHODS --
+		int getWidth(void) { return this->mDimensions[0]; }
+		int getHeight(void) { return this->mDimensions[1]; }
+		void setWidth(int width) { this->mWidth = width; }
+		void setHeight(int height) { this->mHeight = height; }
+
+		// OBJECT METHODS --
+		void update(void);
 	};
 }
 

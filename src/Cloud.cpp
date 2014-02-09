@@ -15,7 +15,7 @@ namespace Nimbus
 		Cloud::count++;
 	}
 
-	// DESTRUCTOR   ----------------------------------
+	// DESTRUCTOR    ----------------------------------
 	Cloud::~Cloud(void)
 	{
 		// Decrement count of the clouds.
@@ -24,5 +24,11 @@ namespace Nimbus
 		// Check for environment security.
 		if(Cloud::count < 0)
 			std::cerr << "OHGOODNESSWHATHAPPENEDSOMETHINGBROKEWOWYOU'RESCREWEDCLOUDSAREINVADINGOHSNAP" << std::endl;
+	}
+
+	// UPDATE        ----------------------------------
+	void Cloud::update(void)
+	{
+
 	}
 }
