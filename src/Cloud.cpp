@@ -11,8 +11,18 @@ namespace Nimbus
 	Cloud::Cloud(int width, int height):
 		mDimensions(width, height)
 	{
+		// Initialize the cloud's name.
+		stringstream buffer;
+
+		buffer << "cloud" << Cloud::count;
+
+		this->name = buffer.str();
+
 		// Incremement count of the clouds.
 		Cloud::count++;
+
+		// Set the cloud as uninitialized.
+		this->initialized = false;
 	}
 
 	// DESTRUCTOR    ----------------------------------
@@ -26,9 +36,27 @@ namespace Nimbus
 			std::cerr << "OHGOODNESSWHATHAPPENEDSOMETHINGBROKEWOWYOU'RESCREWEDCLOUDSAREINVADINGOHSNAP" << std::endl;
 	}
 
-	// UPDATE        ----------------------------------
-	void Cloud::update(void)
+	// INITIALIZE    ----------------------------------
+	void Cloud::init(SceneManager* sceneManager)
 	{
+		// Make sure the cloud isn't already initialized.
+		if(this->initialized) return;
 
+		// Create the entity and node.
+		this->cloudEntity = sceneManager->createEntity(this->name.c_str(), "ogrehead.mesh");
+		this->cloudNode = sceneManager->getRootSceneNode()->createChildSceneNode((this->name + "_node").c_str());
+
+		this->initialized = true;
+	}
+
+	// UPDATE        ----------------------------------
+	void Cloud::update(Vector2 affectedVector)
+	{
+		Vector3 realVector = Vector3::ZERO;
+
+		realVector.x = affectedVector.x;
+		realVector.z = affectedVector.y;
+
+		this->cloudNode->translate(realVector);
 	}
 }

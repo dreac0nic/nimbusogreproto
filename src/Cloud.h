@@ -17,8 +17,18 @@ namespace Nimbus
 		static unsigned long long int count;
 
 		// MEMBER ATTRIBUTES
+		// Tells whether or not the cloud has been initialized.
+		bool initialized;
+
+		// Holds this specific cloud's name.
+		std::string name;
+
 		// Holds the width and height of the cloud's dimensions.
 		std::vector<int> mDimensions;
+
+		// Ogre Objects
+		Entity* cloudEntity;
+		SceneNode* cloudNode;
 
 		// MEMBER METHODS
 	public:
@@ -31,11 +41,12 @@ namespace Nimbus
 		// ACCESSOR METHODS --
 		int getWidth(void) { return this->mDimensions[0]; }
 		int getHeight(void) { return this->mDimensions[1]; }
-		void setWidth(int width) { this->mWidth = width; }
-		void setHeight(int height) { this->mHeight = height; }
+		void setWidth(int width) { this->mDimensions[0] = width; }
+		void setHeight(int height) { this->mDimensions[1] = height; }
 
 		// OBJECT METHODS --
-		void update(void);
+		void init(SceneManager* sceneManager);
+		void update(Vector2 affectedVector);
 	};
 }
 
