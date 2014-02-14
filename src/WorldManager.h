@@ -8,6 +8,7 @@
 #include <OgreRoot.h>
 
 #include "Tile.h"
+#include "Cloud.h"
 
 namespace Nimbus
 {
@@ -30,6 +31,12 @@ namespace Nimbus
 		// Represents our map's vector field with a vector of vectores of ogre vectors. Number of vectors currently dependent on tiles (1:1), but could be changed in the future.
 		std::vector< std::vector<Ogre::Vector2> > mVectors;
 
+		// Holds all the clouds!
+		std::vector<Cloud*> mClouds;
+
+		// Holds the world's cloud plane, allowing the clouds to be moved as one unit.
+		SceneNode* mCloudPlane;
+
 		// MEMBER METHODS
 	public:
 		// CONSTRUCTORS --
@@ -39,7 +46,7 @@ namespace Nimbus
 		~WorldManager(void);
 
 		// MAINTENANCE FUNCTIONS
-		void init(void);
+		void init(SceneManager* sceneManager);
 		bool update(void);
 	};
 }

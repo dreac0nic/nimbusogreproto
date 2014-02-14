@@ -14,9 +14,15 @@ namespace Nimbus
 	WorldManager::~WorldManager(void)
 	{
 		// Cleanup all of the tiles.
-		for(int x = 0; x < mTileCount[0]; ++x) {
-			for(int y = 0; y < mTileCount[1]; ++y) {
-				delete mTiles[x][y];
+		if(this->initialized) {
+			for(int x = 0; x < mTileCount[0]; ++x) {
+				for(int y = 0; y < mTileCount[1]; ++y) {
+					delete mTiles[x][y];
+				}
+			}
+
+			for(int i = 0; i < mClouds.size; ++i) {
+				delete mClouds[i];
 			}
 		}
 	}
@@ -26,7 +32,7 @@ namespace Nimbus
 	 *   allowing each of its delegates to get a chance
 	 *   for an initial run before update cycles begin.
 	 */
-	void WorldManager::init(void)
+	void WorldManager::init(SceneManager* sceneManager)
 	{
 		// Initialize datastructures ...
 		//   Note: See mVectors description for explanation of vector count.
@@ -37,9 +43,15 @@ namespace Nimbus
 			mTiles[i].resize(mTileCount[1]);
 			mVectors[i].resize(mTileCount[1]);
 
-			for(j = 0; j < mTileCount[1]; ++j)
+			for(int j = 0; j < mTileCount[1]; ++j)
 				mVectors[i][j] = Ogre::Vector2::ZERO;
 		}
+
+		// Expand cloud datastructure.
+		this->mClouds.resize(5);
+
+		for(int i = 0; i < mClouds.size; ++i)
+			 this->mClouds[i] =  new Cloud(10, 10);
 
 		// Generate a bunch of random tiles.
 		//   Note: "TILES"
@@ -60,6 +72,8 @@ namespace Nimbus
 				mVectors[x][y].normalise();
 			}
 		}
+
+		this->mCloudPlane = sceneManager->getRootSceneNode()->createChildSceneNode("cloudPlane");
 
 		// After we're all done, mark as initialized
 		this->initialized = true;
@@ -82,12 +96,15 @@ namespace Nimbus
 		}
 
 		// Update Clouds
-		//   NO CLOUDS
+		for(int i = 0; i < this->mClouds.size; ++i) {
+			this->mClouds[i]->update(Vector2::ZERO);
+		}
+			
 
 		// Update Tiles
 		for(int x = 0; x < mTileCount[0]; ++x) {
 			for(int y = 0; y < mTileCount[1]; ++y) {
-				mTiles[x][y] = new Tile();
+				// mTiles[x][y] = new Tile();
 			}
 		}
 
