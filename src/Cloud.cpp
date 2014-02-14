@@ -40,7 +40,15 @@ namespace Nimbus
 	void Cloud::init(SceneManager* sceneManager, std::string cloudPlaneName)
 	{
 		// Make sure the cloud isn't already initialized.
-		if(this->initialized || sceneManager->getSceneNode(cloudPlaneName) == NULL) return;
+		if(this->initialized) // || !sceneManager->hasSceneNode(cloudPlaneName)) return;
+		{
+			return;
+		}
+
+		if(!sceneManager->hasSceneNode(cloudPlaneName))
+		{
+			sceneManager->getRootSceneNode()->addChild(sceneManager->createSceneNode(cloudPlaneName));
+		}
 
 		// Create the entity and node.
 		this->mCloudEntity = sceneManager->createEntity(this->mName.c_str(), "ogrehead.mesh");

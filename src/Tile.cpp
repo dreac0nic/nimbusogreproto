@@ -4,13 +4,26 @@ namespace Nimbus
 {
 	unsigned long long int Tile::count = 0;
 
-	Tile::Tile(float humidity, float temperature, float saturation, float elevation):
-		mHumidity(humidity), mTemperature(temperature), mSaturation(saturation), mElevation(elevation)
+	Tile::Tile(float humidity, float temperature, float saturation, float elevation)
 	{
-		Tile::count++;
+		construct(humidity, temperature, saturation, elevation);
 	}
 
-	Tile::Tile(void): Tile(0.0f, 0.0f, 0.0f, 0.0f) {}
+	Tile::Tile(void)
+	{
+		construct(0.0f, 0.0f, 0.0f, 0.0f);
+	}
+
+	void Tile::construct(float humidity, float temperature, float saturation, float elevation)
+	{
+		// Initialize values
+		mHumidity = humidity;
+		mTemperature = temperature;
+		mSaturation = saturation;
+		mElevation = elevation;
+
+		Tile::count++;
+	}
 
 	Tile::~Tile(void)
 	{

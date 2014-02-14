@@ -17,7 +17,8 @@ This source file is part of the
 #include "NimbusPrototype.h"
 
 //-------------------------------------------------------------------------------------
-NimbusPrototype::NimbusPrototype(void)
+NimbusPrototype::NimbusPrototype(void):
+	mWorldMan((int)(WORLD_SIZE / TERRAIN_SIZE), (int)(WORLD_SIZE / TERRAIN_SIZE), (int)WORLD_SIZE, (int)WORLD_SIZE)
 {
 }
 

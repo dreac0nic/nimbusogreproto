@@ -21,7 +21,7 @@ namespace Nimbus
 				}
 			}
 
-			for(int i = 0; i < mClouds.size; ++i) {
+			for(int i = 0; i < mClouds.size(); ++i) {
 				delete mClouds[i];
 			}
 		}
@@ -50,7 +50,7 @@ namespace Nimbus
 		// Expand cloud datastructure.
 		this->mClouds.resize(5);
 
-		for(int i = 0; i < mClouds.size; ++i) {
+		for(int i = 0; i < mClouds.size(); ++i) {
 			 this->mClouds[i] =  new Cloud(10, 10);
 
 			 this->mClouds[i]->init(sceneManager, "cloudPlane");
@@ -99,7 +99,7 @@ namespace Nimbus
 		}
 
 		// Update Clouds
-		for(int i = 0; i < this->mClouds.size; ++i) {
+		for(int i = 0; i < this->mClouds.size(); ++i) {
 			this->mClouds[i]->update(Vector2::ZERO);
 		}
 			

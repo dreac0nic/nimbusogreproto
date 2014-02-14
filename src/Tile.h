@@ -26,6 +26,7 @@ namespace Nimbus
 		float mElevation;
 
 		// MEMBER METHODS
+		void construct(float humidity, float temperature, float saturation, float elevation);
 	public:
 		// CONSTRUCTORS --
 		Tile(void);
