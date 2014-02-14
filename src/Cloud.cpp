@@ -16,7 +16,7 @@ namespace Nimbus
 
 		buffer << "cloud" << Cloud::count;
 
-		this->name = buffer.str();
+		this->mName = buffer.str();
 
 		// Incremement count of the clouds.
 		Cloud::count++;
@@ -37,14 +37,17 @@ namespace Nimbus
 	}
 
 	// INITIALIZE    ----------------------------------
-	void Cloud::init(SceneManager* sceneManager)
+	void Cloud::init(SceneManager* sceneManager, std::string cloudPlaneName)
 	{
 		// Make sure the cloud isn't already initialized.
-		if(this->initialized) return;
+		if(this->initialized || sceneManager->getSceneNode(cloudPlaneName) == NULL) return;
 
 		// Create the entity and node.
-		this->cloudEntity = sceneManager->createEntity(this->name.c_str(), "ogrehead.mesh");
-		this->cloudNode = sceneManager->getRootSceneNode()->createChildSceneNode((this->name + "_node").c_str());
+		this->mCloudEntity = sceneManager->createEntity(this->mName.c_str(), "ogrehead.mesh");
+		this->mCloudNode = sceneManager->getSceneNode(cloudPlaneName)->createChildSceneNode((this->mName + "_node"));
+
+		// Add the entity to the node.
+		this->mCloudNode->attachObject(mCloudEntity);
 
 		this->initialized = true;
 	}
@@ -57,6 +60,6 @@ namespace Nimbus
 		realVector.x = affectedVector.x;
 		realVector.z = affectedVector.y;
 
-		this->cloudNode->translate(realVector);
+		this->mCloudNode->translate(realVector);
 	}
 }

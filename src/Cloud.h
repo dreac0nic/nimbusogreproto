@@ -4,6 +4,7 @@
 #include <vector>
 
 #include <OgreRoot.h>
+#include <OgreEntity.h>
 
 namespace Nimbus
 {
@@ -21,14 +22,14 @@ namespace Nimbus
 		bool initialized;
 
 		// Holds this specific cloud's name.
-		std::string name;
+		std::string mName;
 
 		// Holds the width and height of the cloud's dimensions.
 		std::vector<int> mDimensions;
 
 		// Ogre Objects
-		Entity* cloudEntity;
-		SceneNode* cloudNode;
+		Entity* mCloudEntity;
+		SceneNode* mCloudNode;
 
 		// MEMBER METHODS
 	public:
@@ -45,7 +46,7 @@ namespace Nimbus
 		void setHeight(int height) { this->mDimensions[1] = height; }
 
 		// OBJECT METHODS --
-		void init(SceneManager* sceneManager);
+		void init(SceneManager* sceneManager, std::string cloudPlaneName);
 		void update(Vector2 affectedVector);
 	};
 }
