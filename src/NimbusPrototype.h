@@ -26,6 +26,9 @@ This source file is part of the
 
 #define TERRAIN_SIZE 513
 #define WORLD_SIZE   12000.0f
+#define MOUSE_PUSH_DISTANCE 80
+#define ZOOM_MAX 12.0f
+#define ZOOM_MIN 1.2f
 
 class NimbusPrototype : public BaseApplication
 {
@@ -51,8 +54,32 @@ public:
 protected:
     virtual void createScene(void);
 	virtual void createFrameListener(void);
+    virtual void chooseSceneManager(void);
 	virtual void destroyScene(void);
 	virtual bool frameRenderingQueued(const Ogre::FrameEvent& event);
+	virtual bool mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id );
+	virtual	bool mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id );
+	virtual bool mouseMoved(const OIS::MouseEvent &arg);
+	virtual bool keyPressed(const OIS::KeyEvent &arg);
+	virtual bool keyReleased(const OIS::KeyEvent &arg);
+	virtual void createCamera(void);
+	bool cameraAccel(const Ogre::FrameEvent &event);
+	bool baseKeyPressFunc(const OIS::KeyEvent &arg);
+
+	Ogre::Real mZoom;
+	Ogre::Real mZoomVelocity;
+
+	Ogre::Real mTopSpeed;
+	Ogre::Vector3 mVelocity;
+	bool mGoingForward;
+	bool mGoingBack;
+	bool mGoingLeft;
+	bool mGoingRight;
+	bool mMouseGoingForward;
+	bool mMouseGoingBack;
+	bool mMouseGoingLeft;
+	bool mMouseGoingRight;
+	bool mFastMove;
 };
 
 #endif

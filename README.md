@@ -29,8 +29,8 @@ Controlling the camera in an RTS style.
  * [X] User Input
     * [X] Arrow-key Panning
     * [X] Border-Pushing
- * [_] Camera Zoom
- * [_] Proper Height Processing
+ * [X] Camera Zoom
+ * [X] Proper Height Processing
 
 ##### Example Gameplay Mechanics
  * [_] Simple Tile Mechanics [SpenSer]
