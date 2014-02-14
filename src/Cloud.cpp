@@ -47,7 +47,8 @@ namespace Nimbus
 
 		if(!sceneManager->hasSceneNode(cloudPlaneName))
 		{
-			sceneManager->getRootSceneNode()->addChild(sceneManager->createSceneNode(cloudPlaneName));
+			//sceneManager->getRootSceneNode()->addChild(sceneManager->createSceneNode(cloudPlaneName));
+			return;
 		}
 
 		// Create the entity and node.

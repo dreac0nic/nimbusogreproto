@@ -47,6 +47,8 @@ namespace Nimbus
 				mVectors[i][j] = Ogre::Vector2::ZERO;
 		}
 
+		this->mCloudPlane = sceneManager->getRootSceneNode()->createChildSceneNode("cloudPlane");
+
 		// Expand cloud datastructure.
 		this->mClouds.resize(5);
 
@@ -76,7 +78,7 @@ namespace Nimbus
 			}
 		}
 
-		this->mCloudPlane = sceneManager->getRootSceneNode()->createChildSceneNode("cloudPlane");
+		
 
 		// After we're all done, mark as initialized
 		this->initialized = true;
