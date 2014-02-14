@@ -203,6 +203,9 @@ void NimbusPrototype::createScene(void)
 
 	// Add skydome.
 	mSceneMgr->setSkyDome(true, "Examples/CloudySky", 5.0f, 8.0f);
+
+	// Startup world manager.
+	this->mWorldMan.init(mSceneMgr);
 }
 
 //-------------------------------------------------------------------------------------
@@ -237,6 +240,8 @@ bool NimbusPrototype::frameRenderingQueued(const Ogre::FrameEvent& event)
 			mTerrainsImported = false;
 		}
 	}
+
+	this->mWorldMan.update();
 
 	return ret;
 }

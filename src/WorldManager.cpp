@@ -50,8 +50,11 @@ namespace Nimbus
 		// Expand cloud datastructure.
 		this->mClouds.resize(5);
 
-		for(int i = 0; i < mClouds.size; ++i)
+		for(int i = 0; i < mClouds.size; ++i) {
 			 this->mClouds[i] =  new Cloud(10, 10);
+
+			 this->mClouds[i]->init(sceneManager, "cloudPlane");
+		}
 
 		// Generate a bunch of random tiles.
 		//   Note: "TILES"
