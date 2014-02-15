@@ -21,7 +21,7 @@ namespace Nimbus
 				}
 			}
 
-			for(int i = 0; i < mClouds.size(); ++i) {
+			for(unsigned int i = 0; i < mClouds.size(); ++i) {
 				delete mClouds[i];
 			}
 		}
@@ -34,6 +34,10 @@ namespace Nimbus
 	 */
 	void WorldManager::init(SceneManager* sceneManager)
 	{
+		// Setup cloud plane ...
+		this->mCloudPlane = sceneManager->getRootSceneNode()->createChildSceneNode("cloudPlane");
+		this->mCloudPlane->translate(Vector3::UNIT_Y * 1500);
+
 		// Initialize datastructures ...
 		//   Note: See mVectors description for explanation of vector count.
 		mTiles.resize(mTileCount[0]);
@@ -46,13 +50,10 @@ namespace Nimbus
 			for(int j = 0; j < mTileCount[1]; ++j)
 				mVectors[i][j] = Ogre::Vector2::ZERO;
 		}
-
-		this->mCloudPlane = sceneManager->getRootSceneNode()->createChildSceneNode("cloudPlane");
-
 		// Expand cloud datastructure.
 		this->mClouds.resize(5);
 
-		for(int i = 0; i < mClouds.size(); ++i) {
+		for(unsigned int i = 0; i < mClouds.size(); ++i) {
 			 this->mClouds[i] =  new Cloud(10, 10);
 
 			 this->mClouds[i]->init(sceneManager, "cloudPlane");
@@ -78,8 +79,6 @@ namespace Nimbus
 			}
 		}
 
-		
-
 		// After we're all done, mark as initialized
 		this->initialized = true;
 	}
@@ -101,7 +100,7 @@ namespace Nimbus
 		}
 
 		// Update Clouds
-		for(int i = 0; i < this->mClouds.size(); ++i) {
+		for(unsigned int i = 0; i < this->mClouds.size(); ++i) {
 			this->mClouds[i]->update(Vector2::ZERO);
 		}
 			
