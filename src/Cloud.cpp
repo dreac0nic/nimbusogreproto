@@ -40,14 +40,8 @@ namespace Nimbus
 	void Cloud::init(SceneManager* sceneManager, std::string cloudPlaneName)
 	{
 		// Make sure the cloud isn't already initialized.
-		if(this->initialized) // || !sceneManager->hasSceneNode(cloudPlaneName)) return;
+		if(this->initialized || !sceneManager->hasSceneNode(cloudPlaneName))
 		{
-			return;
-		}
-
-		if(!sceneManager->hasSceneNode(cloudPlaneName))
-		{
-			//sceneManager->getRootSceneNode()->addChild(sceneManager->createSceneNode(cloudPlaneName));
 			return;
 		}
 
