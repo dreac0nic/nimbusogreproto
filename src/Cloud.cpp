@@ -52,6 +52,9 @@ namespace Nimbus
 		// Add the entity to the node.
 		this->mCloudNode->attachObject(mCloudEntity);
 
+		// Transform the Entity
+		this->mCloudNode->scale(25.0F, 25.0F, 25.0F);
+
 		this->initialized = true;
 	}
 
