@@ -32,4 +32,9 @@ namespace Nimbus
 		if(Tile::count < 0)
 			std::cerr << "SNAPSOMETHINGBADJUSTWENTDOWNBETTERMAKESURETHOSETILESDON'TEXPLODEPREPAREFORSEGFAULT" << std::endl;
 	}
+
+	void Tile::update(void)
+	{
+		std::cout << "TILE!" << std::endl;
+	}
 }

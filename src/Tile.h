@@ -34,6 +34,8 @@ namespace Nimbus
 
 		// DESTRUCTORS (I WILL CALL THEM WHAT I WANT YOU CAN'T TELL ME WAHT TO DO) --
 		~Tile(void);
+
+		void update(void);
 	};
 }
 

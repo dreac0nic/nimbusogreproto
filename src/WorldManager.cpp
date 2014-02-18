@@ -108,7 +108,8 @@ namespace Nimbus
 		// Update Tiles
 		for(int x = 0; x < mTileCount[0]; ++x) {
 			for(int y = 0; y < mTileCount[1]; ++y) {
-				// mTiles[x][y] = new Tile();
+				// Allow each tile to update itself.
+				mTiles[x][y]->update();
 			}
 		}
 
